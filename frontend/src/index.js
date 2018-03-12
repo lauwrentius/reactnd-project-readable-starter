@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
+
+import { Router } from 'react-router-dom'
+import createHistory from 'history/createBrowserHistory'
 
 import { createStore, applyMiddleware, compose } from 'redux'
 import reducer from './reducers'
@@ -17,6 +20,8 @@ const logger = store => next => action => {
   return result
 }
 
+const history = createHistory()
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const store = createStore(
@@ -27,9 +32,11 @@ const store = createStore(
 )
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <Router history={history}>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </Router>,
   document.getElementById('root')
 )
 
