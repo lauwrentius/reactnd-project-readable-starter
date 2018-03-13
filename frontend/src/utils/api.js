@@ -1,5 +1,8 @@
 const URL = 'http://localhost:3001'
-const HEADERS = { 'Authorization': 'whatever-you-want' }
+const HEADERS = {
+  'Content-Type': 'application/json',
+  'Authorization': 'whatever-you-want'
+}
 
 export function getCategories(){
   return fetch(URL+'/categories',{
@@ -12,25 +15,24 @@ export function getCategories(){
 export function getPosts(category = ''){
   let path = (category === '')? '/posts' : '/'+category+'/posts'
 
-  console.log('api',path)
   return fetch(URL+path,{
     headers: HEADERS,
     method: 'GET'
   }).then(res => res.json())
-    .then(data => {console.log("ASD",data); return data})
 }
 
+export function votePost(id, vote){
+  return fetch(URL+'/posts/'+id,{
+    headers: HEADERS,
+    method: 'POST',
+    body: JSON.stringify({option:vote})
+  }).then(res => res.json())
+}
 
-//   fetch(url+'/posts',{
-//     headers: {
-//       'Authorization': 'whatever-you-want'
-//     },
-//     method: 'GET'
-//   }).then( response =>{
-//     response.json().then(data=>{
-//       console.log(data)
-//       data.map( (post) => {
-//         this.props.addPost(post)
-//       })
-//     })
-//   })
+export function postDetails(id){
+  return fetch(URL+'/posts/'+id,{
+    headers: HEADERS,
+    method: 'GET'
+  }).then(res => res.json())
+    // .then(data => {console.log("VOTE",data); return data})
+}

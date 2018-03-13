@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Route } from 'react-router-dom'
+import { withRouter,Route } from 'react-router-dom'
 
 import { addCategory, addPost } from 'actions'
 import './App.css';
 
-import Navs from './navs/Navs'
+import NavHeader from './navHeader/navHeader'
 import PostListings from './postListings/postListings'
-import { getCategories, getPosts } from 'utils/api'
+import PostDetails from './postDetails/postDetails'
+import { getCategories } from 'utils/api'
 
 class App extends Component {
   componentDidMount = () => {
@@ -61,11 +62,16 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Navs></Navs>
+        <NavHeader></NavHeader>
+
         <Route exact path='/' render={() =>
           (<PostListings></PostListings>)}/>
+
         <Route exact path='/cat/:path' render={() =>
           (<PostListings></PostListings>)}/>
+
+        <Route exact path='/post/:id' render={() =>
+          (<PostDetails></PostDetails>)}/>
 
         <hr /><hr />
         <div className="container">
@@ -94,12 +100,11 @@ function mapStateToProps ({ categories, posts }) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    addCategory: (data) => dispatch(addCategory(data)),
-    addPost: (data) => dispatch(addPost(data))
+    addCategory: (data) => dispatch(addCategory(data))
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(App)
+)(App))

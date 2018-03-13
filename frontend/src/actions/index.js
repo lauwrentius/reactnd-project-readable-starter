@@ -9,23 +9,30 @@ export const ADD_COMMENTS = 'ADD_COMMENTS'
 export const EDIT_COMMENTS = 'EDIT_COMMENTS'
 export const DELETE_COMMENTS = 'DELETE_COMMENTS'
 
-export function addCategory (category) {
+export function addCategory(category) {
   return {
     type: ADD_CATEGORY,
     category: category
   }
 }
 
-export function addPost (post) {
+export function addPost(post) {
   return {
     type: ADD_POST,
     post: post
   }
 }
 
-export function clearPost () {
+export function clearPost() {
   return {
     type: CLEAR_POST,
     post: {}
+  }
+}
+
+export function editPost(post) {
+  return {
+    type: EDIT_POST,
+    post: post
   }
 }

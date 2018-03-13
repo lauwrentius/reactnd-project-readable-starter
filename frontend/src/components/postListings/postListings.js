@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import {withRouter, Link} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 
 import { addPost, clearPost } from 'actions'
 import { getPosts } from 'utils/api'
@@ -15,11 +15,18 @@ class PostListings extends Component {
     super(props);
     this.loadPost()
 
-    this.props.history.listen((location, action) => {
-      this.loadPost()
-    });
-
+    // this.props.history.listen((location, action) => {
+    //   console.log("hist",location)
+    //   if (this.props.location !== prevProps.location) {
+    //     this.loadPost()
+    //   }
+    // })
   }
+  componentDidUpdate(prevProps, prevState){
+    if (this.props.location.pathname !== prevProps.location.pathname)
+      this.loadPost()
+  }
+
   loadPost(){
     let path = this.props.history.location.pathname
     let cat =  path.split('/')
@@ -37,24 +44,22 @@ class PostListings extends Component {
       })
     }
   }
-  setSort = (type) => {
-    this.setState({sort: type})
+  setSort = (e) => {
+    this.setState({sort: e.currentTarget.dataset.sort})
   }
   currSort = (type) => {
     return (type === this.state.sort)?'curr':''
   }
 
   displayPost = () => {
-    console.log(this.state.sort)
-
     return this.props.posts.sort( (a,b) => {
       if(this.state.sort === 'date')
-        return a.timestamp - b.timestamp
+        return b.timestamp - a.timestamp
 
       if(this.state.sort === 'score')
-        return a.voteScore - b.voteScore
+        return b.voteScore - a.voteScore
 
-      return a.title - b.title
+      return a.title.localeCompare(b.title);
     })
   }
 
@@ -65,13 +70,19 @@ class PostListings extends Component {
         <div className="row">
           <div className="col-xs-12">
             sort by:&nbsp;
-            <a href="#" className={this.currSort('date')} onClick={()=>this.setSort('date')}>NEW</a>&nbsp;
-            <a href="#" className={this.currSort('score')} onClick={()=>this.setSort('score')}>SCORE</a>&nbsp;
-            <a href="#" className={this.currSort('title')} onClick={()=>this.setSort('title')}>TITLE</a>
+            <a data-sort="date"
+              className={this.currSort("date")}
+              onClick={this.setSort}>NEW</a>&nbsp;
+            <a data-sort="score"
+              className={this.currSort("score")}
+              onClick={this.setSort}>SCORE</a>&nbsp;
+            <a data-sort="title"
+              className={this.currSort("title")}
+              onClick={this.setSort}>TITLE</a>
           </div>
           <div className="col-xs-12">
             {this.displayPost().map(p=>{
-              return <PostDisplay post={p}></PostDisplay>
+              return <PostDisplay key={p.id} post={p}></PostDisplay>
             })}
           </div>
         </div>
@@ -82,14 +93,7 @@ class PostListings extends Component {
 function mapStateToProps ({ categories, posts }) {
   return {
     categories: categories,
-    posts: (posts => {
-      let p = Object.values(posts).sort((a,b)=>{
-        console.log(this.state)
-      })
-
-      console.log("POSTS", p)
-      return p
-    })(posts)
+    posts: Object.values(posts)
   }
 }
 

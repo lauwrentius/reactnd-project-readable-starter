@@ -1,35 +1,32 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import {NavLink, Link} from 'react-router-dom'
+import {withRouter,NavLink} from 'react-router-dom'
 
 import { addCategory } from 'actions'
 
-class Navs extends Component {
-  currNav = (nav) =>{
-    // matchPath('/')
-  }
-
+class NavHeader extends Component {
   render() {
     const { categories } = this.props
 
-    return (<div className="container header">
+    return (<div className="navHeader">
+      <div className="container">
         <div className="row">
           <div className="col-xs-12">
             {Object.keys(categories).map(cat=>{
               let name = categories[cat]['name']
               let path = categories[cat]['path']
 
-              return <span key={path}>
-                <NavLink
+              return <NavLink
+                  key={path}
                   exact
                   activeClassName="curr"
                   to={path}>{name}
-                </NavLink>{'\u00A0'}</span>
+                </NavLink>
             })}
-            <hr />
           </div>
         </div>
-      </div>)
+      </div>
+    </div>)
   }
 }
 
@@ -46,13 +43,13 @@ function mapStateToProps ({ categories }) {
   }
 }
 
-function mapDispatchToProps (dispatch) {
-  return {
-    addCategory: (data) => dispatch(addCategory(data))
-  }
-}
+// function mapDispatchToProps (dispatch) {
+//   return {
+//     addCategory: (data) => dispatch(addCategory(data))
+//   }
+// }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
-  mapDispatchToProps
-)(Navs)
+  // mapDispatchToProps
+)(NavHeader))
