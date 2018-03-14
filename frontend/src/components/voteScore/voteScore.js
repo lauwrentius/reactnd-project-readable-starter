@@ -2,30 +2,41 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import { editPost } from 'actions'
+import { editPost, editComment } from 'actions'
 
-import { votePost } from 'utils/api'
+import { PostDisplay } from 'components/postDisplay/postDisplay'
+import { votePost, voteComment } from 'utils/api'
 
 class VoteScore extends Component {
   static propTypes = {
-    post: PropTypes.object.isRequired
+    id: PropTypes.string.isRequired,
+    score: PropTypes.number.isRequired,
+    type: PropTypes.string 
   }
   votePost = (e) =>{
     console.log(e.currentTarget.dataset.vote)
-    votePost(this.props.post.id, e.currentTarget.dataset.vote)
-      .then(res => {
-        console.log("ASD", res, this.props)
-        this.props.editPost(res)
-      })
+    let option = e.currentTarget.dataset.vote
+    if(this.props.type === 'comment'){
+      voteComment(this.props.id, option)
+        .then(res => {
+          console.log(res);
+          this.props.editComment(res)
+        })      
+    }else{
+      votePost(this.props.id, option)
+        .then(res => {
+          this.props.editPost(res)
+        })
+    }
   }
 
   render(){
-    const { post } = this.props
+    const { score } = this.props
 
     return <div className="voteScore">
           <a href onClick={this.votePost} data-vote="upVote"
             className="upvote glyphicon glyphicon-thumbs-up"></a>
-          <div className="score">{post.voteScore}</div>
+          <div className="score">{score}</div>
           <a href onClick={this.votePost} data-vote="downVote"
           className="downvote glyphicon glyphicon-thumbs-down"></a>
         </div>
@@ -38,7 +49,8 @@ function mapStateToProps ({}) {
 }
 function mapDispatchToProps (dispatch) {
   return {
-    editPost: (data) => dispatch(editPost(data))
+    editPost: (data) => dispatch(editPost(data)),
+    editComment: (data) => dispatch(editComment(data))
   }
 }
 

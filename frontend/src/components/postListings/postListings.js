@@ -11,16 +11,8 @@ class PostListings extends Component {
   state = {
     sort: 'score'
   }
-  constructor(props) {
-    super(props);
-    this.loadPost()
-
-    // this.props.history.listen((location, action) => {
-    //   console.log("hist",location)
-    //   if (this.props.location !== prevProps.location) {
-    //     this.loadPost()
-    //   }
-    // })
+  componentWillMount() {
+    this.loadPost()    
   }
   componentDidUpdate(prevProps, prevState){
     if (this.props.location.pathname !== prevProps.location.pathname)
@@ -65,20 +57,28 @@ class PostListings extends Component {
 
   render() {
     const { posts } = this.props
-
+    const { sort } = this.state
+    
     return (<div className="container postListings">
         <div className="row">
           <div className="col-xs-12">
-            sort by:&nbsp;
-            <a data-sort="date"
-              className={this.currSort("date")}
-              onClick={this.setSort}>NEW</a>&nbsp;
-            <a data-sort="score"
-              className={this.currSort("score")}
-              onClick={this.setSort}>SCORE</a>&nbsp;
-            <a data-sort="title"
-              className={this.currSort("title")}
-              onClick={this.setSort}>TITLE</a>
+            <div className="sort-well well">
+              sort by:&nbsp;
+              <a data-sort='date'
+                className={(sort === 'date')?'curr':''}
+                onClick={this.setSort}>NEW</a>&nbsp;
+              <a data-sort='score'
+                className={(sort === 'score')?'curr':''}
+                onClick={this.setSort}>SCORE</a>&nbsp;
+              <a data-sort='title'
+                className={(sort === 'title')?'curr':''}
+                onClick={this.setSort}>TITLE</a>
+              <div className="pull-right">
+                <button className="btn btn-sm btn-primary">
+                  Add Post <span className="glyphicon glyphicon-plus"></span>  
+                </button>
+              </div>
+            </div>
           </div>
           <div className="col-xs-12">
             {this.displayPost().map(p=>{

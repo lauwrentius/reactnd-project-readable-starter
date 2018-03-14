@@ -19,11 +19,18 @@ a.curr{
   text-decoration: underline;
 }
 
+.commentEntry,
 .postEntry{
   margin: 5px 0px 15px 0px;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  width: 100%;
 }
+.commentContent,
 .postContent{
-  display: inline-block;
+  flex-grow: 1;
+  /* display: inline-block; */
   vertical-align: top;
   font-size: 14px;
   line-height: 16px;
@@ -33,9 +40,13 @@ a.curr{
   font-size: 20px;
   line-height: 22px;
 }
+.commentBody{
+  font-size: 16px;
+  /* line-height: 22px; */
+}
 
 .voteScore{
-  display: inline-block;
+  /* display: inline-block; */
   text-align: center;
   width: 40px;
   vertical-align: top;
@@ -50,4 +61,15 @@ a.curr{
 .voteScore a{
   font-weight: bold;
   text-decoration: none !important;
+}
+
+
+.sort-well{
+  font-size: 14px;
+  padding: 0px 0px 0px 19px;
+  line-height: 29px;
+}
+
+.btn-group{
+  margin: 5px 0px;
 }

@@ -5,7 +5,7 @@ const HEADERS = {
 }
 
 export function getCategories(){
-  return fetch(URL+'/categories',{
+  return fetch(`${URL}/categories`,{
     headers: HEADERS,
     method: 'GET'
   }).then(res => res.json())
@@ -13,26 +13,39 @@ export function getCategories(){
 }
 
 export function getPosts(category = ''){
-  let path = (category === '')? '/posts' : '/'+category+'/posts'
+  let path = (category === '')? '/posts' : `/${category}/posts`
 
-  return fetch(URL+path,{
+  return fetch(`${URL}${path}`,{
     headers: HEADERS,
     method: 'GET'
   }).then(res => res.json())
 }
 
 export function votePost(id, vote){
-  return fetch(URL+'/posts/'+id,{
+  return fetch(`${URL}/posts/${id}`,{
+    headers: HEADERS,
+    method: 'POST',
+    body: JSON.stringify({option:vote})
+  }).then(res => res.json())
+}
+export function voteComment(id, vote){
+  return fetch(`${URL}/comments/${id}`,{
     headers: HEADERS,
     method: 'POST',
     body: JSON.stringify({option:vote})
   }).then(res => res.json())
 }
 
-export function postDetails(id){
-  return fetch(URL+'/posts/'+id,{
+export function getPostDetails(id){
+  return fetch(`${URL}/posts/${id}`,{
     headers: HEADERS,
     method: 'GET'
   }).then(res => res.json())
-    // .then(data => {console.log("VOTE",data); return data})
+}
+
+export function getPostComments(id){
+  return fetch(`${URL}/posts/${id}/comments`,{
+    headers: HEADERS,
+    method: 'GET'
+  }).then(res => res.json())
 }

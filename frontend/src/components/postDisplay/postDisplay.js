@@ -12,9 +12,12 @@ class PostDisplay extends Component {
   }
   render() {
     const { post } = this.props
-
+    
+    if( !post )
+      return ''
+      
     return <div className="postEntry">
-      <VoteScore post={post}></VoteScore>
+      <VoteScore id={post.id} score={post.voteScore}></VoteScore>
         <div className="postContent">
           <h4 className="title">
              <Link to={'/post/'+post.id}>
@@ -28,10 +31,15 @@ class PostDisplay extends Component {
             <span className="author">by {post.author}</span><br />
             <Link to={'/cat/'+post.category} className="category">
               {post.category}
-            </Link>&mdash;
-            <span className="comments">{post.commentCount}&nbsp;
-              comment{(post.commentCount >= 2)? 's':''}
-            </span>
+            </Link>&nbsp;
+            <span className="comments">({post.commentCount}&nbsp;
+              comment{(post.commentCount >= 2)? 's':''})
+            </span><br />
+            <div className="btn-group">
+              <button className="btn btn-xs btn-default"><span className="glyphicon glyphicon-pencil"></span> Edit</button>
+              &nbsp;&nbsp;
+              <button className="btn btn-xs btn-default"><span className="glyphicon glyphicon-remove"></span> Delete</button>
+            </div>  
           </div>
         </div>
       </div>
