@@ -20,7 +20,6 @@ export function getPosts(category = ''){
     method: 'GET'
   }).then(res => res.json())
 }
-
 export function votePost(id, vote){
   return fetch(`${URL}/posts/${id}`,{
     headers: HEADERS,
@@ -28,11 +27,10 @@ export function votePost(id, vote){
     body: JSON.stringify({option:vote})
   }).then(res => res.json())
 }
-export function voteComment(id, vote){
-  return fetch(`${URL}/comments/${id}`,{
+export function deletePost(id){
+  return fetch(`${URL}/posts/${id}`,{
     headers: HEADERS,
-    method: 'POST',
-    body: JSON.stringify({option:vote})
+    method: 'DELETE',
   }).then(res => res.json())
 }
 
@@ -43,9 +41,23 @@ export function getPostDetails(id){
   }).then(res => res.json())
 }
 
+
 export function getPostComments(id){
   return fetch(`${URL}/posts/${id}/comments`,{
     headers: HEADERS,
     method: 'GET'
+  }).then(res => res.json())
+}
+export function voteComment(id, vote){
+  return fetch(`${URL}/comments/${id}`,{
+    headers: HEADERS,
+    method: 'POST',
+    body: JSON.stringify({option:vote})
+  }).then(res => res.json())
+}
+export function deleteComment(id){
+  return fetch(`${URL}/comments/${id}`,{
+    headers: HEADERS,
+    method: 'DELETE'
   }).then(res => res.json())
 }

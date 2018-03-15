@@ -3,8 +3,9 @@ import { combineReducers } from 'redux'
 import {
   ADD_CATEGORY,
   ADD_POST,
-  EDIT_POST,
   CLEAR_POST,
+  EDIT_POST,
+  DELETE_POST,
   ADD_COMMENT,
   EDIT_COMMENT,
   CLEAR_COMMENT
@@ -31,9 +32,11 @@ function posts (state = {}, action) {
         ...state,
         [post.id]: post,
       }
-
     case EDIT_POST:
       return Object.assign({}, state, {[post.id]:post})
+
+    case DELETE_POST:
+      return { ...state }
 
     case CLEAR_POST:
       return {}

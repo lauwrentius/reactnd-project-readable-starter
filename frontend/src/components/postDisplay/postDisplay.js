@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types'
 
-import { getPosts } from 'utils/api'
+import { deletePost } from 'actions'
+import * as API from 'utils/api'
 import VoteScore from 'components/voteScore/voteScore'
 
 
@@ -10,12 +12,26 @@ class PostDisplay extends Component {
   static propTypes = {
     post: PropTypes.object.isRequired
   }
-  render() {
+  onDelete = () => {
     const { post } = this.props
     
+    // API.deletePost(post.id).then(res=>{
+    //   console.log(res)
+    //   deletePost(post.id)
+      // editPost
+    })
+
+    // Object.assign({},
+    //   ...Object.values(state)
+    //     .filter(p=>{ p.id !== post.id })
+    //     .map(p=> ({[p.id]:p})))
+  }
+  render() {
+    const { post } = this.props
+
     if( !post )
       return ''
-      
+
     return <div className="postEntry">
       <VoteScore id={post.id} score={post.voteScore}></VoteScore>
         <div className="postContent">
@@ -38,12 +54,29 @@ class PostDisplay extends Component {
             <div className="btn-group">
               <button className="btn btn-xs btn-default"><span className="glyphicon glyphicon-pencil"></span> Edit</button>
               &nbsp;&nbsp;
-              <button className="btn btn-xs btn-default"><span className="glyphicon glyphicon-remove"></span> Delete</button>
-            </div>  
+              <button className="btn btn-xs btn-default" onClick={this.onDelete}>
+                <span className="glyphicon glyphicon-remove"></span> Delete
+              </button>
+            </div>
           </div>
         </div>
       </div>
   }
 }
 
-export default PostDisplay
+function mapStateToProps ({ posts }) {
+  return {
+    posts: posts
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    deletePost: (data) => dispatch(deletePost(data))
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PostDisplay)

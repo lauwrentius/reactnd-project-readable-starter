@@ -3,8 +3,14 @@ import { connect } from 'react-redux'
 import {withRouter,NavLink} from 'react-router-dom'
 
 import { addCategory } from 'actions'
+import { getCategories } from 'utils/api'
 
 class NavHeader extends Component {
+  componentWillMount = () => {
+    getCategories().then(res=>{
+      res.map(cat=>this.props.addCategory(cat))
+    })
+  }
   render() {
     const { categories } = this.props
 
@@ -43,13 +49,13 @@ function mapStateToProps ({ categories }) {
   }
 }
 
-// function mapDispatchToProps (dispatch) {
-//   return {
-//     addCategory: (data) => dispatch(addCategory(data))
-//   }
-// }
+function mapDispatchToProps (dispatch) {
+  return {
+    addCategory: (data) => dispatch(addCategory(data))
+  }
+}
 
 export default withRouter(connect(
   mapStateToProps,
-  // mapDispatchToProps
+  mapDispatchToProps
 )(NavHeader))

@@ -37,6 +37,12 @@ export function editPost(post) {
     post: post
   }
 }
+export function deletePost(post) {
+  return {
+    type: DELETE_POST,
+    post: post
+  }
+}
 
 
 export function addComment(comment) {

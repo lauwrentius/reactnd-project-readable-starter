@@ -1,14 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 
+import { deleteComment } from 'utils/api'
 import VoteScore from 'components/voteScore/voteScore'
 
 class CommentDisplay extends Component {
   static propTypes = {
     comment: PropTypes.object.isRequired
   }
+  onDelete = (e) => {
+    deleteComment(this.props.comment.id).then(res=>{
+      console.log(res)
+    })
+  }
+
   render() {
     const { comment } = this.props
+
+    if(comment.deleted == true)
+      return <div className="commentEntry well">[Comments Removed]</div>
 
     return <div className="commentEntry well">
       <VoteScore type="comment" id={comment.id} score={comment.voteScore}></VoteScore>
@@ -24,7 +34,9 @@ class CommentDisplay extends Component {
           <div className="btn-group">
             <button className="btn btn-xs btn-default"><span className="glyphicon glyphicon-pencil"></span> Edit</button>
             &nbsp;&nbsp;
-            <button className="btn btn-xs btn-default"><span className="glyphicon glyphicon-remove"></span> Delete</button>
+            <button className="btn btn-xs btn-default" onClick={this.onDelete}>
+              <span className="glyphicon glyphicon-remove"></span> Delete
+            </button>
           </div>
         </div>
       </div>

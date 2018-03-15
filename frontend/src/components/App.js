@@ -8,15 +8,11 @@ import './App.css';
 import NavHeader from './navHeader/navHeader'
 import PostListings from './postListings/postListings'
 import PostDetails from './postDetails/postDetails'
-import { getCategories } from 'utils/api'
 
 class App extends Component {
   componentDidMount = () => {
     let url = 'http://localhost:3001'
 
-    getCategories().then(res=>{
-      res.map(cat=>this.props.addCategory(cat))
-    })
     // getPosts('react').then(res=>{
     //   console.log("react",res)
     // })

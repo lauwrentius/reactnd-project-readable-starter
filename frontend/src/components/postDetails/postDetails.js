@@ -37,7 +37,7 @@ class PostDetails extends Component {
 
       return b.voteScore - a.voteScore
     })
-    this.setState({comments, sort})  
+    this.setState({comments, sort})
   }
   displayComments = () => {
     return this.props.comments.sort( (a,b) => {
@@ -48,17 +48,18 @@ class PostDetails extends Component {
     })
   }
   render() {
-    const { post, comments } = this.props 
+    const { post, comments } = this.props
     const { sort } = this.state
-    
+
     if( !post )
       return ''
-      
+
     return <div className="postDetails container">
 
       <PostDisplay post={post}></PostDisplay>
-      
+
       <div className="postBody well">{post.body}</div>
+
       <h4><b>Comments</b></h4>
       <div className="sort-well well">
         sort by:&nbsp;
@@ -74,17 +75,17 @@ class PostDetails extends Component {
           </button>
         </div>
       </div>
-      
-      <div className="row">
-        <div className="col-xs-12 col-md-6">
-          <CommentForm></CommentForm>
-        </div>  
-      </div>
 
       <div className="commentsDisplay">
         {this.displayComments().map(comment=>{
           return <CommentDisplay key={comment.id} comment={comment}></CommentDisplay>
         })}
+      </div>
+
+      <div className="row">
+        <div className="col-xs-12 col-md-6">
+          <CommentForm></CommentForm>
+        </div>
       </div>
       </div>
   }
