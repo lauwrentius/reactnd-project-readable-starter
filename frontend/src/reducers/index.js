@@ -36,7 +36,11 @@ function posts (state = {}, action) {
       return Object.assign({}, state, {[post.id]:post})
 
     case DELETE_POST:
-      return { ...state }
+      // return { ...state }
+      return Object.assign({},
+        ...Object.values(state)
+          .filter(p=>(p.id !== post.id))
+          .map(p=> ({[p.id]:p})))
 
     case CLEAR_POST:
       return {}

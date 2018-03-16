@@ -3,11 +3,11 @@ import { connect } from 'react-redux'
 import {withRouter,NavLink} from 'react-router-dom'
 
 import { addCategory } from 'actions'
-import { getCategories } from 'utils/api'
+import API from 'utils/api'
 
 class NavHeader extends Component {
   componentWillMount = () => {
-    getCategories().then(res=>{
+    API.getCategories().then(res=>{
       res.map(cat=>this.props.addCategory(cat))
     })
   }

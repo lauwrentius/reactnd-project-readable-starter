@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import {withRouter} from 'react-router-dom'
 
 import { addPost, clearPost } from 'actions'
-import { getPosts } from 'utils/api'
+import API from 'utils/api'
 
 import PostDisplay from 'components/postDisplay/postDisplay'
 
@@ -12,7 +12,7 @@ class PostListings extends Component {
     sort: 'score'
   }
   componentWillMount() {
-    this.loadPost()    
+    this.loadPost()
   }
   componentDidUpdate(prevProps, prevState){
     if (this.props.location.pathname !== prevProps.location.pathname)
@@ -26,12 +26,12 @@ class PostListings extends Component {
     this.props.clearPost()
 
     if(path === '/'){
-      getPosts().then(res=>{
+      API.getPosts().then(res=>{
         res.map(post=>this.props.addPost(post))
       })
     }
     if(cat[1] === 'cat'){
-      getPosts(cat[2]).then(res=>{
+      API.getPosts(cat[2]).then(res=>{
         res.map(post=>this.props.addPost(post))
       })
     }
@@ -58,7 +58,7 @@ class PostListings extends Component {
   render() {
     const { posts } = this.props
     const { sort } = this.state
-    
+
     return (<div className="container postListings">
         <div className="row">
           <div className="col-xs-12">
@@ -75,7 +75,7 @@ class PostListings extends Component {
                 onClick={this.setSort}>TITLE</a>
               <div className="pull-right">
                 <button className="btn btn-sm btn-primary">
-                  Add Post <span className="glyphicon glyphicon-plus"></span>  
+                  Add Post <span className="glyphicon glyphicon-plus"></span>
                 </button>
               </div>
             </div>

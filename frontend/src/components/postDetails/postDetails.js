@@ -8,7 +8,7 @@ import PostDisplay from 'components/postDisplay/postDisplay'
 import CommentDisplay from 'components/commentDisplay/commentDisplay'
 import CommentForm from 'components/commentForm/commentForm'
 
-import {getPostDetails, getPostComments} from 'utils/api'
+import API from 'utils/api'
 
 
 class PostDetails extends Component {
@@ -21,10 +21,10 @@ class PostDetails extends Component {
     this.props.clearPost()
     this.props.clearComment()
 
-    getPostDetails(id).then(res=>{
+    API.getPostDetails(id).then(res=>{
       this.props.addPost(res)
     })
-    getPostComments(id).then(res=>{
+    API.getPostComments(id).then(res=>{
       this.setState({comments: res})
       res.map(comment=> this.props.addComment(comment))
     })

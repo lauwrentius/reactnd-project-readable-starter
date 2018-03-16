@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 
-import { deleteComment } from 'utils/api'
+import API from 'utils/api'
 import VoteScore from 'components/voteScore/voteScore'
 
 class CommentDisplay extends Component {
@@ -9,7 +9,7 @@ class CommentDisplay extends Component {
     comment: PropTypes.object.isRequired
   }
   onDelete = (e) => {
-    deleteComment(this.props.comment.id).then(res=>{
+    API.deleteComment(this.props.comment.id).then(res=>{
       console.log(res)
     })
   }

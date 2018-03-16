@@ -5,25 +5,25 @@ import PropTypes from 'prop-types'
 import { editPost, editComment } from 'actions'
 
 import { PostDisplay } from 'components/postDisplay/postDisplay'
-import { votePost, voteComment } from 'utils/api'
+import API from 'utils/api'
 
 class VoteScore extends Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
     score: PropTypes.number.isRequired,
-    type: PropTypes.string 
+    type: PropTypes.string
   }
   votePost = (e) =>{
     console.log(e.currentTarget.dataset.vote)
     let option = e.currentTarget.dataset.vote
     if(this.props.type === 'comment'){
-      voteComment(this.props.id, option)
+      API.voteComment(this.props.id, option)
         .then(res => {
           console.log(res);
           this.props.editComment(res)
-        })      
+        })
     }else{
-      votePost(this.props.id, option)
+      API.votePost(this.props.id, option)
         .then(res => {
           this.props.editPost(res)
         })

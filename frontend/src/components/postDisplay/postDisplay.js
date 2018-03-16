@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import { deletePost } from 'actions'
-import * as API from 'utils/api'
+import API from 'utils/api'
 import VoteScore from 'components/voteScore/voteScore'
 
 
@@ -13,18 +13,10 @@ class PostDisplay extends Component {
     post: PropTypes.object.isRequired
   }
   onDelete = () => {
-    const { post } = this.props
-    
-    // API.deletePost(post.id).then(res=>{
-    //   console.log(res)
-    //   deletePost(post.id)
-      // editPost
+    const { post, deletePost } = this.props
+    API.deletePost(post.id).then(res=>{
+      deletePost(post)
     })
-
-    // Object.assign({},
-    //   ...Object.values(state)
-    //     .filter(p=>{ p.id !== post.id })
-    //     .map(p=> ({[p.id]:p})))
   }
   render() {
     const { post } = this.props
@@ -66,7 +58,6 @@ class PostDisplay extends Component {
 
 function mapStateToProps ({ posts }) {
   return {
-    posts: posts
   }
 }
 

@@ -4,60 +4,63 @@ const HEADERS = {
   'Authorization': 'whatever-you-want'
 }
 
-export function getCategories(){
-  return fetch(`${URL}/categories`,{
-    headers: HEADERS,
-    method: 'GET'
-  }).then(res => res.json())
-    .then(data => data.categories)
-}
+class API{
+  static getCategories(){
+    return fetch(`${URL}/categories`,{
+      headers: HEADERS,
+      method: 'GET'
+    }).then(res => res.json())
+      .then(data => data.categories)
+  }
 
-export function getPosts(category = ''){
-  let path = (category === '')? '/posts' : `/${category}/posts`
+  static getPosts(category = ''){
+    let path = (category === '')? '/posts' : `/${category}/posts`
 
-  return fetch(`${URL}${path}`,{
-    headers: HEADERS,
-    method: 'GET'
-  }).then(res => res.json())
-}
-export function votePost(id, vote){
-  return fetch(`${URL}/posts/${id}`,{
-    headers: HEADERS,
-    method: 'POST',
-    body: JSON.stringify({option:vote})
-  }).then(res => res.json())
-}
-export function deletePost(id){
-  return fetch(`${URL}/posts/${id}`,{
-    headers: HEADERS,
-    method: 'DELETE',
-  }).then(res => res.json())
-}
+    return fetch(`${URL}${path}`,{
+      headers: HEADERS,
+      method: 'GET'
+    }).then(res => res.json())
+  }
+  static votePost(id, vote){
+    return fetch(`${URL}/posts/${id}`,{
+      headers: HEADERS,
+      method: 'POST',
+      body: JSON.stringify({option:vote})
+    }).then(res => res.json())
+  }
+  static deletePost(id){
+    return fetch(`${URL}/posts/${id}`,{
+      headers: HEADERS,
+      method: 'DELETE',
+    }).then(res => res.json())
+  }
 
-export function getPostDetails(id){
-  return fetch(`${URL}/posts/${id}`,{
-    headers: HEADERS,
-    method: 'GET'
-  }).then(res => res.json())
-}
+  static getPostDetails(id){
+    return fetch(`${URL}/posts/${id}`,{
+      headers: HEADERS,
+      method: 'GET'
+    }).then(res => res.json())
+  }
 
 
-export function getPostComments(id){
-  return fetch(`${URL}/posts/${id}/comments`,{
-    headers: HEADERS,
-    method: 'GET'
-  }).then(res => res.json())
+  static getPostComments(id){
+    return fetch(`${URL}/posts/${id}/comments`,{
+      headers: HEADERS,
+      method: 'GET'
+    }).then(res => res.json())
+  }
+  static voteComment(id, vote){
+    return fetch(`${URL}/comments/${id}`,{
+      headers: HEADERS,
+      method: 'POST',
+      body: JSON.stringify({option:vote})
+    }).then(res => res.json())
+  }
+  static deleteComment(id){
+    return fetch(`${URL}/comments/${id}`,{
+      headers: HEADERS,
+      method: 'DELETE'
+    }).then(res => res.json())
+  }
 }
-export function voteComment(id, vote){
-  return fetch(`${URL}/comments/${id}`,{
-    headers: HEADERS,
-    method: 'POST',
-    body: JSON.stringify({option:vote})
-  }).then(res => res.json())
-}
-export function deleteComment(id){
-  return fetch(`${URL}/comments/${id}`,{
-    headers: HEADERS,
-    method: 'DELETE'
-  }).then(res => res.json())
-}
+export default API
