@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { withRouter,Route } from 'react-router-dom'
+import { withRouter, Route, Switch } from 'react-router-dom'
 
 import { addCategory, addPost } from 'actions'
 import './App.css';
@@ -8,6 +8,7 @@ import './App.css';
 import NavHeader from './navHeader/navHeader'
 import PostListings from './postListings/postListings'
 import PostDetails from './postDetails/postDetails'
+import PostForm from './postForm/postForm'
 
 class App extends Component {
   componentDidMount = () => {
@@ -59,15 +60,14 @@ class App extends Component {
     return (
       <div className="App">
         <NavHeader></NavHeader>
-        <PostForm>
-        <Route exact path='/' render={() =>
-          (<PostListings></PostListings>)}/>
 
-        <Route exact path='/cat/:path' render={() =>
-          (<PostListings></PostListings>)}/>
+        <Route exact path='/' component={PostListings}/>
+        <Route exact path='/cat/:category' component={PostListings}/>
 
-        <Route exact path='/post/:id' render={() =>
-          (<PostDetails></PostDetails>)}/>
+        <Route exact path='/post/:method/:param?' component={PostForm}/>
+        <Route exact path='/postDetail/:id' component={PostDetails}/>
+
+
 
         <hr /><hr />
         <div className="container">

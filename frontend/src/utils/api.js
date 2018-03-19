@@ -13,12 +13,26 @@ class API{
       .then(data => data.categories)
   }
 
+  static addPost(post){
+    return fetch(`${URL}/posts`,{
+      headers: HEADERS,
+      method: 'POST',
+      body: JSON.stringify(post)
+    }).then(res => res.json())
+  }
   static getPosts(category = ''){
     let path = (category === '')? '/posts' : `/${category}/posts`
 
     return fetch(`${URL}${path}`,{
       headers: HEADERS,
       method: 'GET'
+    }).then(res => res.json())
+  }
+  static editPost(id, post){
+    return fetch(`${URL}/posts/${id}`,{
+      headers: HEADERS,
+      method: 'PUT',
+      body: JSON.stringify(post)
     }).then(res => res.json())
   }
   static votePost(id, vote){

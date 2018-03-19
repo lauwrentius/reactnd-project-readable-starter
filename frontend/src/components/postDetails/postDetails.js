@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import {withRouter} from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import { clearPost, addPost, addComment, clearComment } from 'actions'
 import PostDisplay from 'components/postDisplay/postDisplay'
 import CommentDisplay from 'components/commentDisplay/commentDisplay'
 import CommentForm from 'components/commentForm/commentForm'
-
+import CommentListings from 'components/commentListings/commentListings'
 import API from 'utils/api'
 
 
@@ -17,16 +16,12 @@ class PostDetails extends Component {
     sort: 'date'
   }
   componentWillMount() {
-    let id = this.props.history.location.pathname.split('/')[2]
-    this.props.clearPost()
-    this.props.clearComment()
+    let id = this.props.match.params.id
 
+    this.props.clearPost()
     API.getPostDetails(id).then(res=>{
+      console.log("DETAILS",res)
       this.props.addPost(res)
-    })
-    API.getPostComments(id).then(res=>{
-      this.setState({comments: res})
-      res.map(comment=> this.props.addComment(comment))
     })
   }
   setSort = (e) =>{
@@ -50,43 +45,24 @@ class PostDetails extends Component {
   render() {
     const { post, comments } = this.props
     const { sort } = this.state
+    // const details = (post.body !== undefined) ? (
+    //     <div>
+    //       <div className="postBody well">{post.body}</div>
+    //       <CommentListings></CommentListings>
+    //     </div>
+    //   ):('')
 
     if( !post )
       return ''
 
     return <div className="postDetails container">
-
-      <PostDisplay post={post}></PostDisplay>
-
-      <div className="postBody well">{post.body}</div>
-
-      <h4><b>Comments</b></h4>
-      <div className="sort-well well">
-        sort by:&nbsp;
-        <a data-sort='date'
-          className={(sort === 'date')?'curr':''}
-          onClick={this.setSort}>NEW</a>&nbsp;
-        <a data-sort='score'
-          className={(sort === 'score')?'curr':''}
-          onClick={this.setSort}>SCORE</a>&nbsp;
-        <div className="pull-right">
-          <button className="btn btn-sm btn-primary">
-            <span className="glyphicon glyphicon-plus"></span> Add Comments
-          </button>
-        </div>
-      </div>
-
-      <div className="commentsDisplay">
-        {this.displayComments().map(comment=>{
-          return <CommentDisplay key={comment.id} comment={comment}></CommentDisplay>
-        })}
-      </div>
-
-      <div className="row">
-        <div className="col-xs-12 col-md-6">
-          <CommentForm></CommentForm>
-        </div>
-      </div>
+        <PostDisplay post={post}></PostDisplay>
+        {post.body &&
+          <div>
+            <div className="postBody well">{post.body}</div>
+            <CommentListings></CommentListings>
+          </div>
+        }
       </div>
   }
 }
@@ -107,7 +83,7 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withRouter(connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(PostDetails))
+)(PostDetails)

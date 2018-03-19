@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import {withRouter} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { addPost, clearPost } from 'actions'
 import API from 'utils/api'
@@ -20,8 +20,7 @@ class PostListings extends Component {
   }
 
   loadPost(){
-    let path = this.props.history.location.pathname
-    let cat =  path.split('/')
+    const { path, params } = this.props.match
 
     this.props.clearPost()
 
@@ -29,9 +28,9 @@ class PostListings extends Component {
       API.getPosts().then(res=>{
         res.map(post=>this.props.addPost(post))
       })
-    }
-    if(cat[1] === 'cat'){
-      API.getPosts(cat[2]).then(res=>{
+    }else{
+
+      API.getPosts(params['category']).then(res=>{
         res.map(post=>this.props.addPost(post))
       })
     }
@@ -56,8 +55,9 @@ class PostListings extends Component {
   }
 
   render() {
-    const { posts } = this.props
+    const { posts, match } = this.props
     const { sort } = this.state
+    let category = (match.params.category)? match.params.category: ''
 
     return (<div className="container postListings">
         <div className="row">
@@ -74,13 +74,18 @@ class PostListings extends Component {
                 className={(sort === 'title')?'curr':''}
                 onClick={this.setSort}>TITLE</a>
               <div className="pull-right">
-                <button className="btn btn-sm btn-primary">
+                <Link to={`/post/add/${category}`} className="btn btn-sm btn-primary">
                   Add Post <span className="glyphicon glyphicon-plus"></span>
-                </button>
+                </Link>
               </div>
             </div>
           </div>
           <div className="col-xs-12">
+            {this.displayPost().length === 0 &&
+              <div className="well">
+                <h4>Sorry, no Posts in this category</h4>
+              </div>
+            }
             {this.displayPost().map(p=>{
               return <PostDisplay key={p.id} post={p}></PostDisplay>
             })}
@@ -104,7 +109,7 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default withRouter(connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(PostListings))
+)(PostListings)

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import {Link} from 'react-router-dom'
+import {Link,withRouter} from 'react-router-dom'
 import PropTypes from 'prop-types'
+import { Modal } from 'react-bootstrap';
 
 import { deletePost } from 'actions'
 import API from 'utils/api'
@@ -12,10 +13,14 @@ class PostDisplay extends Component {
   static propTypes = {
     post: PropTypes.object.isRequired
   }
+  state = {
+    show: false
+  }
   onDelete = () => {
-    const { post, deletePost } = this.props
+    const { post, deletePost, history } = this.props
     API.deletePost(post.id).then(res=>{
       deletePost(post)
+      history.push(`/`)
     })
   }
   render() {
@@ -24,11 +29,37 @@ class PostDisplay extends Component {
     if( !post )
       return ''
 
+    if( post.error ){
+      return <div className="postEntry">
+      <h4 className="title">[Post not found]</h4>
+        </div>
+    }
     return <div className="postEntry">
+      <Modal show={this.state.show} onHide={()=>this.setState({show:false})}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Delete <b><i>{post.title}</i></b> post?
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="btn-group" role="group" aria-label="group-prompt">
+            <button type="button" className="btn btn-danger"
+              onClick={this.onDelete}>
+              <span className="glyphicon glyphicon-trash"></span> Delete
+            </button>
+            <button type="button" className="btn btn-default"
+              onClick={()=>this.setState({show:false})}>
+              <span className="glyphicon glyphicon-remove"></span> Cancel
+            </button>
+          </div>
+        </Modal.Footer>
+      </Modal>
+
       <VoteScore id={post.id} score={post.voteScore}></VoteScore>
         <div className="postContent">
           <h4 className="title">
-             <Link to={'/post/'+post.id}>
+             <Link to={'/postDetail/'+post.id}>
               {post.title}
              </Link>
           </h4>
@@ -44,9 +75,12 @@ class PostDisplay extends Component {
               comment{(post.commentCount >= 2)? 's':''})
             </span><br />
             <div className="btn-group">
-              <button className="btn btn-xs btn-default"><span className="glyphicon glyphicon-pencil"></span> Edit</button>
+              <Link to={`/post/edit/${post.id}`} className="btn btn-xs btn-default">
+                <span className="glyphicon glyphicon-pencil"></span> Edit
+              </Link>
               &nbsp;&nbsp;
-              <button className="btn btn-xs btn-default" onClick={this.onDelete}>
+              <button className="btn btn-xs btn-default"
+                onClick={()=>this.setState({show:true})}>
                 <span className="glyphicon glyphicon-remove"></span> Delete
               </button>
             </div>
@@ -67,7 +101,7 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(PostDisplay)
+)(PostDisplay))
