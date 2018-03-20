@@ -39,7 +39,7 @@ class API{
     return fetch(`${URL}/posts/${id}`,{
       headers: HEADERS,
       method: 'POST',
-      body: JSON.stringify({option:vote})
+      body: JSON.stringify(vote)
     }).then(res => res.json())
   }
   static deletePost(id){
@@ -63,11 +63,25 @@ class API{
       method: 'GET'
     }).then(res => res.json())
   }
+  static addComment(comment){
+    return fetch(`${URL}/comments`,{
+      headers: HEADERS,
+      method: 'POST',
+      body: JSON.stringify(comment)
+    }).then(res => res.json())
+  }
+  static editComment(id, comment){
+    return fetch(`${URL}/comments/${id}`,{
+      headers: HEADERS,
+      method: 'PUT',
+      body: JSON.stringify(comment)
+    }).then(res => res.json())
+  }
   static voteComment(id, vote){
     return fetch(`${URL}/comments/${id}`,{
       headers: HEADERS,
       method: 'POST',
-      body: JSON.stringify({option:vote})
+      body: JSON.stringify(vote)
     }).then(res => res.json())
   }
   static deleteComment(id){

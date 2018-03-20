@@ -11,49 +11,6 @@ import PostDetails from './postDetails/postDetails'
 import PostForm from './postForm/postForm'
 
 class App extends Component {
-  componentDidMount = () => {
-    let url = 'http://localhost:3001'
-
-    // getPosts('react').then(res=>{
-    //   console.log("react",res)
-    // })
-    // getPosts('redux').then(res=>{
-    //   console.log("redux",res)
-    // })
-    // getPosts('udacity').then(res=>{
-    //   console.log("udacity",res)
-    // })
-  //   fetch(url+'/categories',{
-  //     headers: {
-  //       'Authorization': 'whatever-you-want'
-  //     },
-  //     method: 'GET'
-  //   }).then( response =>{
-  //     response.json().then(data=>{
-  //       console.log(data.categories)
-  //       data.categories.map( (cat) => {
-  //         this.props.addCategory({name:cat.name, path:cat.path})
-  //       })
-  //     })
-  //   })
-  //   fetch(url+'/posts',{
-  //     headers: {
-  //       'Authorization': 'whatever-you-want'
-  //     },
-  //     method: 'GET'
-  //   }).then( response =>{
-  //     response.json().then(data=>{
-  //       console.log(data)
-  //       data.map( (post) => {
-  //         this.props.addPost(post)
-  //       })
-  //     })
-  //   })
-  }
-  componentDidUpdate = (prevProps, prevState) => {
-    console.log('next',prevProps)
-  }
-
   render() {
     const { addCal } = this.props
 

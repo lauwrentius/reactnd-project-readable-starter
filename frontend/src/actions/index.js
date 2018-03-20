@@ -5,6 +5,7 @@ export const CLEAR_POST = 'CLEAR_POST'
 export const EDIT_POST = 'EDIT_POST'
 export const DELETE_POST = 'DELETE_POST'
 
+export const INIT_COMMENT = 'INIT_COMMENT'
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const CLEAR_COMMENT = 'CLEAR_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
@@ -30,7 +31,6 @@ export function clearPost() {
     post: {}
   }
 }
-
 export function editPost(post) {
   return {
     type: EDIT_POST,
@@ -44,7 +44,12 @@ export function deletePost(post) {
   }
 }
 
-
+export function initComment(comment) {
+  return {
+    type: INIT_COMMENT,
+    comment: comment
+  }
+}
 export function addComment(comment) {
   return {
     type: ADD_COMMENT,
@@ -54,6 +59,12 @@ export function addComment(comment) {
 export function editComment(comment) {
   return {
     type: EDIT_COMMENT,
+    comment: comment
+  }
+}
+export function deleteComment(comment) {
+  return {
+    type: DELETE_COMMENT,
     comment: comment
   }
 }

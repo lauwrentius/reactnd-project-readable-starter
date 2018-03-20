@@ -14,16 +14,15 @@ class VoteScore extends Component {
     type: PropTypes.string
   }
   votePost = (e) =>{
-    console.log(e.currentTarget.dataset.vote)
     let option = e.currentTarget.dataset.vote
     if(this.props.type === 'comment'){
-      API.voteComment(this.props.id, option)
+      API.voteComment(this.props.id, {option})
         .then(res => {
           console.log(res);
           this.props.editComment(res)
         })
     }else{
-      API.votePost(this.props.id, option)
+      API.votePost(this.props.id, {option})
         .then(res => {
           this.props.editPost(res)
         })
@@ -34,10 +33,10 @@ class VoteScore extends Component {
     const { score } = this.props
 
     return <div className="voteScore">
-          <a href onClick={this.votePost} data-vote="upVote"
+          <a onClick={this.votePost} data-vote="upVote"
             className="upvote glyphicon glyphicon-thumbs-up"></a>
           <div className="score">{score}</div>
-          <a href onClick={this.votePost} data-vote="downVote"
+          <a onClick={this.votePost} data-vote="downVote"
           className="downvote glyphicon glyphicon-thumbs-down"></a>
         </div>
   }

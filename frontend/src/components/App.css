@@ -27,6 +27,13 @@ a.curr{
   align-items: flex-start;
   width: 100%;
 }
+.postBody{
+  white-space: pre-line;
+}
+.commentEntry.edit{
+  padding: 19px 0px;
+}
+
 .commentContent,
 .postContent{
   flex-grow: 1;
@@ -42,7 +49,7 @@ a.curr{
 }
 .commentBody{
   font-size: 16px;
-  /* line-height: 22px; */
+  white-space: pre-line;
 }
 
 .voteScore{

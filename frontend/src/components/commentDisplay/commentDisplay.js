@@ -1,24 +1,43 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import API from 'utils/api'
+import { editComment, deleteComment } from 'actions'
 import VoteScore from 'components/voteScore/voteScore'
+import CommentForm from 'components/commentForm/commentForm'
+import API from 'utils/api'
 
 class CommentDisplay extends Component {
   static propTypes = {
-    comment: PropTypes.object.isRequired
+    id: PropTypes.string.isRequired,
+  }
+  onEdit = () => {
+    const { comments, id } = this.props
+    let comment = Object.assign({}, comments[id]);
+    comment.editMode = true
+    this.props.editComment(comment)
   }
   onDelete = (e) => {
-    API.deleteComment(this.props.comment.id).then(res=>{
+    API.deleteComment(this.props.id).then(res=>{
       console.log(res)
+      this.props.deleteComment(res)
     })
   }
 
   render() {
-    const { comment } = this.props
+    const { comments, id } = this.props
+    const comment = comments[id]
 
-    if(comment.deleted == true)
-      return <div className="commentEntry well">[Comments Removed]</div>
+    if(comment === undefined)
+      return ''
+
+    if(comment.editMode)
+      return <div className="commentEntry well row edit">
+          <div className="col-md-6 col-sm-12 col-xs-12">
+            <CommentForm id={comment.id}>
+            </CommentForm>
+          </div>
+        </div>
 
     return <div className="commentEntry well">
       <VoteScore type="comment" id={comment.id} score={comment.voteScore}></VoteScore>
@@ -32,8 +51,10 @@ class CommentDisplay extends Component {
           </span>,&nbsp;
           <span className="author">by {comment.author}</span><br />
           <div className="btn-group">
-            <button className="btn btn-xs btn-default"><span className="glyphicon glyphicon-pencil"></span> Edit</button>
-            &nbsp;&nbsp;
+            <button className="btn btn-xs btn-default"
+              onClick={this.onEdit}>
+              <span className="glyphicon glyphicon-pencil"></span> Edit
+            </button>
             <button className="btn btn-xs btn-default" onClick={this.onDelete}>
               <span className="glyphicon glyphicon-remove"></span> Delete
             </button>
@@ -44,4 +65,21 @@ class CommentDisplay extends Component {
   }
 }
 
-export default CommentDisplay
+function mapStateToProps ({ comments }) {
+  return {
+    comments: comments
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    editComment: (data) => dispatch(editComment(data)),
+    deleteComment: (data) => dispatch(deleteComment(data)),
+    // clearComment: () => dispatch(clearComment())
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CommentDisplay)

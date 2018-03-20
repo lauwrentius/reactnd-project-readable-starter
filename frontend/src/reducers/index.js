@@ -6,8 +6,10 @@ import {
   CLEAR_POST,
   EDIT_POST,
   DELETE_POST,
+  INIT_COMMENT,
   ADD_COMMENT,
   EDIT_COMMENT,
+  DELETE_COMMENT,
   CLEAR_COMMENT
 } from '../actions'
 
@@ -24,7 +26,7 @@ function categories (state = {}, action) {
   }
 }
 function posts (state = {}, action) {
-  const { post } = action
+  const { post, comment} = action
 
   switch (action.type){
     case ADD_POST:
@@ -35,8 +37,14 @@ function posts (state = {}, action) {
     case EDIT_POST:
       return Object.assign({}, state, {[post.id]:post})
 
+    case ADD_COMMENT:
+    case DELETE_COMMENT:
+      let p = Object.assign({}, state[comment.parentId])
+      p['commentCount'] += (action.type == ADD_COMMENT)? 1 : -1
+
+      return Object.assign({}, state, {[p.id]:p})
+
     case DELETE_POST:
-      // return { ...state }
       return Object.assign({},
         ...Object.values(state)
           .filter(p=>(p.id !== post.id))
@@ -53,6 +61,9 @@ function comments (state={}, action){
   const { comment } = action
 
   switch (action.type){
+    case INIT_COMMENT:
+      return Object.assign({},comment.map(c=>[c.id]:c))
+
     case ADD_COMMENT:
       return {
         ...state,
@@ -60,6 +71,13 @@ function comments (state={}, action){
       }
     case EDIT_COMMENT:
       return Object.assign({}, state, {[comment.id]:comment})
+
+    case DELETE_COMMENT:
+      return Object.assign({},
+        ...Object.values(state)
+          .filter(c=>(c.id !== comment.id))
+          .map(c=> ({[c.id]:c})))
+
     case CLEAR_COMMENT:
       return {}
     default:

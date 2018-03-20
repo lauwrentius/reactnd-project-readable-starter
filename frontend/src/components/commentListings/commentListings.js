@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import {withRouter} from 'react-router-dom'
 
-import { addComment, clearComment } from 'actions'
+import { initComment, clearComment } from 'actions'
 import PostDisplay from 'components/postDisplay/postDisplay'
 import CommentDisplay from 'components/commentDisplay/commentDisplay'
 import CommentForm from 'components/commentForm/commentForm'
@@ -11,7 +11,7 @@ import API from 'utils/api'
 
 class CommentListings extends Component {
   state = {
-    comments: [],
+    // comments: [],
     sort: 'date'
   }
 
@@ -19,16 +19,13 @@ class CommentListings extends Component {
     console.log("asdasdasdasdasd",this.props)
 
     let id = this.props.match.params.id
-    // this.props.clearPost()
+
     this.props.clearComment()
-    // console.log("COMMENTS",this.props)
-    // API.getPostDetails(id).then(res=>{
-    //   console.log("DETAILS",res)
-    //   this.props.addPost(res)
-    // })
     API.getPostComments(id).then(res=>{
-      this.setState({comments: res})
-      res.map(comment=> this.props.addComment(comment))
+      console.log("INIT",res)
+      this.props.initComment(res)
+      // this.setState({comments: res})
+      // res.map(comment=> this.props.initComment(comment))
     })
   }
   setSort = (e) =>{
@@ -53,6 +50,9 @@ class CommentListings extends Component {
     const { post, comments } = this.props
     const { sort } = this.state
 
+    if(post === undefined)
+      return ''
+
     return <div className="commentListings">
         <h4><b>Comments</b></h4>
         <div className="sort-well well">
@@ -71,12 +71,12 @@ class CommentListings extends Component {
         </div>
         <div className="commentsDisplay">
           {this.displayComments().map(comment=>{
-            return <CommentDisplay key={comment.id} comment={comment}></CommentDisplay>
+            return <CommentDisplay key={comment.id} id={comment.id}></CommentDisplay>
           })}
         </div>
         <div className="row">
           <div className="col-xs-12 col-md-6">
-            <CommentForm></CommentForm>
+            <CommentForm parentId={post.id}></CommentForm>
           </div>
         </div>
       </div>
@@ -92,7 +92,7 @@ function mapStateToProps ({ posts, comments }) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    addComment: (data) => dispatch(addComment(data)),
+    initComment: (data) => dispatch(initComment(data)),
     clearComment: () => dispatch(clearComment())
   }
 }
