@@ -2,31 +2,33 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {withRouter,NavLink} from 'react-router-dom'
 
-import { addCategory } from 'actions'
+import { initCategory } from 'actions'
 import API from 'utils/api'
 
 class NavHeader extends Component {
   componentWillMount = () => {
     API.getCategories().then(res=>{
-      res.map(cat=>this.props.addCategory(cat))
+      this.props.initCategory(res.reduce((obj,val)=> {
+        val.path = `/cat/${val.path}`
+        obj[val.name]=val
+        return obj
+      },{}))
     })
   }
   render() {
     const { categories } = this.props
+    const nav = [{name:'all', path:'/'}].concat(Object.values(categories))
 
     return (<div className="navHeader">
       <div className="container">
         <div className="row">
           <div className="col-xs-12">
-            {Object.keys(categories).map(cat=>{
-              let name = categories[cat]['name']
-              let path = categories[cat]['path']
-
+            {nav.map(i=>{
               return <NavLink
-                  key={path}
+                  key={i.name}
                   exact
                   activeClassName="curr"
-                  to={path}>{name}
+                  to={i.path}>{i.name}
                 </NavLink>
             })}
           </div>
@@ -40,18 +42,13 @@ function mapStateToProps ({ categories }) {
 
 
   return {
-    categories:  Object.keys(categories).reduce( (prev, curr) => {
-      console.log("REDUCE",prev, curr)
-      prev[curr] = { name: categories[curr].name,
-        path: '/cat/'+categories[curr].path }
-
-      return prev}, {all:{name:'all',path:'/'}})
+    categories:  categories
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    addCategory: (data) => dispatch(addCategory(data))
+    initCategory: (data) => dispatch(initCategory(data))
   }
 }
 

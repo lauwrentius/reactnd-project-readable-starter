@@ -1,4 +1,4 @@
-export const ADD_CATEGORY = 'ADD_CATEGORY'
+export const INIT_CATEGORY = 'INIT_CATEGORY'
 
 export const ADD_POST = 'ADD_POST'
 export const CLEAR_POST = 'CLEAR_POST'
@@ -11,9 +11,9 @@ export const CLEAR_COMMENT = 'CLEAR_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
 
-export function addCategory(category) {
+export function initCategory(category) {
   return {
-    type: ADD_CATEGORY,
+    type: INIT_CATEGORY,
     category: category
   }
 }

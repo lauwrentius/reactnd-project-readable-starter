@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { withRouter, Route, Switch } from 'react-router-dom'
 
-import { addCategory, addPost } from 'actions'
 import './App.css';
 
 import NavHeader from './navHeader/navHeader'
@@ -24,14 +23,6 @@ class App extends Component {
         <Route exact path='/post/:method/:param?' component={PostForm}/>
         <Route exact path='/postDetail/:id' component={PostDetails}/>
 
-
-
-        <hr /><hr />
-        <div className="container">
-        {JSON.stringify(this.props.category)}
-        <br /><br />
-        {JSON.stringify(this.props.post)}
-        </div>
       </div>
     )
   }
@@ -39,14 +30,11 @@ class App extends Component {
 
 function mapStateToProps ({ categories, posts }) {
   return {
-    categories: categories,
-    posts: posts
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    addCategory: (data) => dispatch(addCategory(data))
   }
 }
 
