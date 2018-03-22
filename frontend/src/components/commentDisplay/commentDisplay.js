@@ -11,6 +11,14 @@ class CommentDisplay extends Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
   }
+  state = {
+    classNames: "commentEntry well"
+  }
+  componentDidMount(){
+    const { classNames } = this.state
+
+    this.setState({classNames: classNames.concat(" active")})
+  }
   onEdit = () => {
     const { comments, id } = this.props
     let comment = Object.assign({}, comments[id]);
@@ -26,6 +34,7 @@ class CommentDisplay extends Component {
 
   render() {
     const { comments, id } = this.props
+    const { classNames } = this.state
     const comment = comments[id]
 
     if(comment === undefined)
@@ -39,7 +48,7 @@ class CommentDisplay extends Component {
           </div>
         </div>
 
-    return <div className="commentEntry well">
+    return <div className={classNames}>
       <VoteScore type="comment" id={comment.id} score={comment.voteScore}></VoteScore>
       <div className="commentContent">
         <div className="commentBody">

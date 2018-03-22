@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import {withRouter} from 'react-router-dom'
+import { CSSTransitionGroup } from 'react-transition-group'
 
 import { initComment, clearComment } from 'actions'
 import CommentDisplay from 'components/commentDisplay/commentDisplay'
@@ -66,10 +67,18 @@ class CommentListings extends Component {
           ))}
         </div>
         <div className="commentsDisplay">
+          <CSSTransitionGroup
+          transitionName="example"
+          transitionAppearTimeout={500}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={300}>
+
           {this.displayComments().map(comment=>{
-            return <CommentDisplay key={comment.id} id={comment.id}>
-              </CommentDisplay>
+            return <div key={comment.id}><CommentDisplay id={comment.id}>
+              </CommentDisplay></div>
           })}
+
+          </CSSTransitionGroup>
         </div>
       </div>
   }
