@@ -51,6 +51,10 @@ class CommentListings extends Component {
     if(post === undefined)
       return ''
 
+    const commentList =  this.displayComments().map(comment=>(
+      <div key={comment.id}><CommentDisplay id={comment.id}>
+      </CommentDisplay></div>))
+
     return <div className="commentListings">
         <h4>Comments</h4>
         <div className="row">
@@ -72,12 +76,7 @@ class CommentListings extends Component {
           transitionAppearTimeout={500}
           transitionEnterTimeout={500}
           transitionLeaveTimeout={300}>
-
-          {this.displayComments().map(comment=>{
-            return <div key={comment.id}><CommentDisplay id={comment.id}>
-              </CommentDisplay></div>
-          })}
-
+            {commentList}
           </CSSTransitionGroup>
         </div>
       </div>
