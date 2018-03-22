@@ -1,7 +1,9 @@
-.navHeader{
+header{
   background-color: #000;
-  padding: 4px 0px;
   margin: 0px 0px 15px 0px;
+}
+.navHeader{
+  padding: 4px 0px;
 }
 .navHeader a{
   color: white;
@@ -10,10 +12,10 @@
   font-weight: 100;
 }
 
+
 a{
   cursor: pointer;
 }
-
 a.curr{
   font-weight: bold;
   text-decoration: underline;

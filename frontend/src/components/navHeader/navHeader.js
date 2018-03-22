@@ -20,9 +20,9 @@ class NavHeader extends Component {
     const nav = [{name:'all', path:'/'}].concat(Object.values(categories))
 
     return (<div className="navHeader">
-      <div className="container">
+      {/*<div className="container">
         <div className="row">
-          <div className="col-xs-12">
+          <div className="col-xs-12">*/}
             {nav.map(i=>{
               return <NavLink
                   key={i.name}
@@ -31,9 +31,9 @@ class NavHeader extends Component {
                   to={i.path}>{i.name}
                 </NavLink>
             })}
-          </div>
+          {/*</div>
         </div>
-      </div>
+      </div>*/}
     </div>)
   }
 }

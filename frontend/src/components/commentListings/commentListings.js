@@ -4,34 +4,31 @@ import PropTypes from 'prop-types'
 import {withRouter} from 'react-router-dom'
 
 import { initComment, clearComment } from 'actions'
-import PostDisplay from 'components/postDisplay/postDisplay'
 import CommentDisplay from 'components/commentDisplay/commentDisplay'
 import CommentForm from 'components/commentForm/commentForm'
 import API from 'utils/api'
 
 class CommentListings extends Component {
   state = {
-    // comments: [],
-    sort: 'date'
+    sort: 'NEW',
+    sortArr: ["NEW","SCORE"]
   }
 
   componentWillMount() {
-    console.log("asdasdasdasdasd",this.props)
-
     let id = this.props.match.params.id
 
     this.props.clearComment()
     API.getPostComments(id).then(res=>{
-      console.log("INIT",res)
-      this.props.initComment(res)
-      // this.setState({comments: res})
-      // res.map(comment=> this.props.initComment(comment))
+      this.props.initComment(res.reduce((obj,val)=> {
+        obj[val.id]=val
+        return obj
+      },{}))
     })
   }
   setSort = (e) =>{
     let sort = e.currentTarget.dataset.sort
-    let comments = this.state.comments.sort((a,b) => {
-      if(sort === 'date')
+    let comments = this.props.comments.sort((a,b) => {
+      if(sort === 'NEW')
         return b.timestamp - a.timestamp
 
       return b.voteScore - a.voteScore
@@ -40,7 +37,7 @@ class CommentListings extends Component {
   }
   displayComments = () => {
     return this.props.comments.sort( (a,b) => {
-      if(this.state.sort === 'date')
+      if(this.state.sort === 'NEW')
         return b.timestamp - a.timestamp
 
       return b.voteScore - a.voteScore
@@ -48,36 +45,31 @@ class CommentListings extends Component {
   }
   render() {
     const { post, comments } = this.props
-    const { sort } = this.state
+    const { sort, sortArr } = this.state
 
     if(post === undefined)
       return ''
 
     return <div className="commentListings">
-        <h4><b>Comments</b></h4>
-        <div className="sort-well well">
-          sort by:&nbsp;
-          <a data-sort='date'
-            className={(sort === 'date')?'curr':''}
-            onClick={this.setSort}>NEW</a>&nbsp;
-          <a data-sort='score'
-            className={(sort === 'score')?'curr':''}
-            onClick={this.setSort}>SCORE</a>&nbsp;
-          <div className="pull-right">
-            <button className="btn btn-sm btn-primary">
-              <span className="glyphicon glyphicon-plus"></span> Add Comments
-            </button>
-          </div>
-        </div>
-        <div className="commentsDisplay">
-          {this.displayComments().map(comment=>{
-            return <CommentDisplay key={comment.id} id={comment.id}></CommentDisplay>
-          })}
-        </div>
+        <h4>Comments</h4>
         <div className="row">
           <div className="col-xs-12 col-md-6">
             <CommentForm parentId={post.id}></CommentForm>
           </div>
+        </div>
+        <div className="sort-well well">
+          sort by:&nbsp;
+          {sortArr.map(s=> (
+            <span><a data-sort={s}
+              className={(sort === s)?'curr':''}
+              onClick={this.setSort}>{s}</a>&nbsp;</span>
+          ))}
+        </div>
+        <div className="commentsDisplay">
+          {this.displayComments().map(comment=>{
+            return <CommentDisplay key={comment.id} id={comment.id}>
+              </CommentDisplay>
+          })}
         </div>
       </div>
   }

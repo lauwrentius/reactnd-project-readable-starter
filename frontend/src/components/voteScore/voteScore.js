@@ -3,8 +3,6 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import { editPost, editComment } from 'actions'
-
-import { PostDisplay } from 'components/postDisplay/postDisplay'
 import API from 'utils/api'
 
 class VoteScore extends Component {
@@ -18,7 +16,6 @@ class VoteScore extends Component {
     if(this.props.type === 'comment'){
       API.voteComment(this.props.id, {option})
         .then(res => {
-          console.log(res);
           this.props.editComment(res)
         })
     }else{

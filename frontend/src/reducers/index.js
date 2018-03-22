@@ -61,7 +61,7 @@ function comments (state={}, action){
 
   switch (action.type){
     case INIT_COMMENT:
-      return Object.assign({},comment.map(c=>[c.id]:c))
+      return comment
 
     case ADD_COMMENT:
       return {
