@@ -2,13 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/app';
 import registerServiceWorker from './registerServiceWorker';
-
 import { Router } from 'react-router-dom'
 import createHistory from 'history/createBrowserHistory'
-
+import thunkMiddleware from 'redux-thunk'
 import { createStore, applyMiddleware, compose } from 'redux'
-import reducer from './reducers'
 import { Provider } from 'react-redux'
+
+import reducer from './reducers'
+
+
 
 const logger = store => next => action => {
   console.group(action.type)
@@ -26,7 +28,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const store = createStore(
   reducer,
   composeEnhancers(
-    applyMiddleware(logger)
+    applyMiddleware(thunkMiddleware, logger)
   )
 )
 

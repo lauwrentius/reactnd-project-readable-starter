@@ -2,16 +2,17 @@ import { combineReducers } from 'redux'
 
 import {
   INIT_CATEGORY,
+  INIT_POST,
   ADD_POST,
   CLEAR_POST,
   EDIT_POST,
   DELETE_POST,
   INIT_COMMENT,
   ADD_COMMENT,
+  CLEAR_COMMENT,
   EDIT_COMMENT,
-  DELETE_COMMENT,
-  CLEAR_COMMENT
-} from '../actions'
+  REMOVE_COMMENT
+} from 'actions'
 
 function categories (state = {}, action) {
   const { category } = action
@@ -28,6 +29,9 @@ function posts (state = {}, action) {
   const { post, comment} = action
 
   switch (action.type){
+    case INIT_POST:
+      return post
+
     case ADD_POST:
       return {
         ...state,
@@ -37,7 +41,7 @@ function posts (state = {}, action) {
       return Object.assign({}, state, {[post.id]:post})
 
     case ADD_COMMENT:
-    case DELETE_COMMENT:
+    case REMOVE_COMMENT:
       let p = Object.assign({}, state[comment.parentId])
       p['commentCount'] += (action.type === ADD_COMMENT)? 1 : -1
 
@@ -71,7 +75,7 @@ function comments (state={}, action){
     case EDIT_COMMENT:
       return Object.assign({}, state, {[comment.id]:comment})
 
-    case DELETE_COMMENT:
+    case REMOVE_COMMENT:
       return Object.assign({},
         ...Object.values(state)
           .filter(c=>(c.id !== comment.id))

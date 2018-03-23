@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import uuidv1 from 'uuid/v1'
 
 import API from 'utils/api'
@@ -13,29 +14,33 @@ class PostForm extends Component {
     title: "",
     body: "",
     author: "",
-    category: ""
+    category: "",
+    editMode: false
   }
 
   /**
   * @description populate the form on post edit.
   */
   componentWillMount = () => {
-    const {match} = this.props
+    const { match } = this.props
+    const id = match.params.id
+    const category = match.params.category
 
-    if(match.params.method === 'edit'){
-      let id = match.params.param
+    console.log(this.props.match)
+    if( id !== undefined){
       API.getPostDetails(id).then(res=>{
-        console.log(res)
         this.setState({
           id,
           title: res.title,
           body: res.body,
           author: res.author,
-          category: res.category
+          category: res.category,
+          editMode: true
         })
       })
-    }else{
-      this.setState({category:match.params.param})
+    }
+    if( category !== undefined ){
+      this.setState({category})
     }
   }
 
@@ -50,13 +55,14 @@ class PostForm extends Component {
   * @description Triggered when the user submits the post.
   */
   onSubmit = (e) => {
-    const {match, history} = this.props
-    const {id, title,body,author,category} = this.state
+    const {categories, match, history} = this.props
+    const {id, title, body, author, category, editMode} = this.state
+    const cat = (category === '')? categories[0].name:category
 
-    if(match.params.method === 'edit'){
+    if(editMode){
       API.editPost(id, {title, body})
         .then(res=>{
-          history.push(`/postDetail/${id}`)
+          history.goBack()
         })
     }else{
       API.addPost({
@@ -65,9 +71,9 @@ class PostForm extends Component {
         title,
         body,
         author,
-        category
+        category: cat
       }).then(res =>{
-        history.push(`/postDetail/${res['id']}`)
+        history.push(`/${res.category}/${res.id}`)
       })
     }
   }
@@ -77,11 +83,11 @@ class PostForm extends Component {
   */
   render() {
     const {categories, match} = this.props
-    const {title, body, author, category} = this.state
+    const {title, body, author, category, editMode} = this.state
 
     return <div className="post-form row">
       <div className="col-md-8">
-        <h3>{`${match.params.method} Post`}</h3>
+        <h3>{editMode ? "Edit" : "Add"} Post</h3>
         <div className="form-group">
           <label>Post Title</label>
           <input type="text" value={title}
@@ -99,14 +105,14 @@ class PostForm extends Component {
         <div className="form-group">
           <label>Author</label>
           <input type="text" value={author}
-          name="author" disabled={match.params.method === 'edit'}
+          name="author" disabled={editMode}
           onChange={this.handleChange}
           className="post-title form-control" />
         </div>
         <div className="form-group">
           <label>Categories</label>
           <select className="form-control" value={category}
-            name="category" disabled={match.params.method === 'edit'}
+            name="category" disabled={editMode}
             onChange={this.handleChange}>
             {categories.map(cat=>
               <option key={cat['name']} value={cat['name']}>
@@ -117,7 +123,7 @@ class PostForm extends Component {
         </div>
         <div className="form-group text-right">
           <button className="btn btn-primary" onClick={this.onSubmit}>
-            {`${match.params.method} Post`}
+            {editMode ? "Edit" : "Add"} Post
           </button>
         </div>
       </div>
@@ -142,7 +148,7 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(PostForm)
+)(PostForm))

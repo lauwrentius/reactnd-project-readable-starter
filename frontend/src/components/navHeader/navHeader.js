@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {withRouter,NavLink} from 'react-router-dom'
 
-import { initCategory } from 'actions'
-import API from 'utils/api'
+import { fetchCategory } from 'actions'
 
 /**
 * @description Header section for the app.
@@ -12,16 +11,10 @@ import API from 'utils/api'
 class NavHeader extends Component {
 
   /**
-  * @description Calls the api to load all of the available categories
+  * @description Fetch all of the available categories
   */
   componentWillMount = () => {
-    API.getCategories().then(res=>{
-      this.props.initCategory(res.reduce((obj,val)=> {
-        val.path = `/cat/${val.path}`
-        obj[val.name]=val
-        return obj
-      },{}))
-    })
+    this.props.fetchCategory()
   }
 
   /**
@@ -29,13 +22,13 @@ class NavHeader extends Component {
   */
   render() {
     const { categories } = this.props
-    const nav = [{name:'all', path:'/'}].concat(Object.values(categories))
+    const nav = [{name:'all', path:'/', exact: true}].concat(Object.values(categories))
 
     return (<div className="navHeader">
             {nav.map(i=>{
               return <NavLink
                   key={i.name}
-                  exact
+                  exact={i.exact}
                   activeClassName="curr"
                   to={i.path}>{i.name}
                 </NavLink>
@@ -58,7 +51,7 @@ function mapStateToProps ({ categories }) {
 */
 function mapDispatchToProps (dispatch) {
   return {
-    initCategory: (data) => dispatch(initCategory(data))
+    fetchCategory: () => dispatch(fetchCategory())
   }
 }
 

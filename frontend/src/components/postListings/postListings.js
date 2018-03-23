@@ -3,9 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import PostDisplay from 'components/postDisplay/postDisplay'
-import { addPost, clearPost } from 'actions'
-import API from 'utils/api'
-
+import { fetchPost } from 'actions'
 
 /**
 * @description Displays a list of posts for a categories.
@@ -38,16 +36,10 @@ class PostListings extends Component {
   loadPost(){
     const { path, params } = this.props.match
 
-    this.props.clearPost()
-    if(path === '/'){
-      API.getPosts().then(res=>{
-        res.map(post=>this.props.addPost(post))
-      })
-    }else{
-      API.getPosts(params['category']).then(res=>{
-        res.map(post=>this.props.addPost(post))
-      })
-    }
+    if(path === '/')
+      this.props.fetchPost()
+    else
+      this.props.fetchPost(params['category'])
   }
 
   /**
@@ -89,7 +81,7 @@ class PostListings extends Component {
               onClick={this.setSort}>{s}</a>&nbsp;</span>
           ))}
           <div className="pull-right">
-            <Link to={`/post/add/${category}`} className="btn btn-sm btn-primary">
+            <Link to={`/addPost/${category}`} className="btn btn-sm btn-primary">
               Add Post <span className="glyphicon glyphicon-plus"></span>
             </Link>
           </div>
@@ -120,8 +112,7 @@ function mapStateToProps ({ posts }) {
 */
 function mapDispatchToProps (dispatch) {
   return {
-    addPost: (data) => dispatch(addPost(data)),
-    clearPost: () => dispatch(clearPost())
+    fetchPost: (data) => dispatch(fetchPost(data))
   }
 }
 

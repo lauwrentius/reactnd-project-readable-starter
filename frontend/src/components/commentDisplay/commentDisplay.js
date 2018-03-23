@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import { editComment, deleteComment } from 'actions'
 import VoteScore from 'components/voteScore/voteScore'
 import CommentForm from 'components/commentForm/commentForm'
-import API from 'utils/api'
 
 /**
 * @description Displays a single block of comment.
@@ -22,7 +21,7 @@ class CommentDisplay extends Component {
   */
   onEdit = () => {
     const { comments, id } = this.props
-    let comment = Object.assign({}, comments[id]);
+    const comment = Object.assign({}, comments[id]);
     comment.editMode = true
     this.props.editComment(comment)
   }
@@ -31,9 +30,7 @@ class CommentDisplay extends Component {
   * @description Delete comment click event.
   */
   onDelete = (e) => {
-    API.deleteComment(this.props.id).then(res=>{
-      this.props.deleteComment(res)
-    })
+    this.props.deleteComment(this.props.id)
   }
 
   /**

@@ -44,11 +44,6 @@ class PostDisplay extends Component {
     if( post === undefined )
       return ''
 
-    if( post.error ){
-      return <div className="postEntry">
-      <h4 className="title">[Post not found]</h4>
-        </div>
-    }
     return <div className="postEntry">
       <Modal show={this.state.show} onHide={()=>this.setState({show:false})}>
         <Modal.Header closeButton>
@@ -74,7 +69,7 @@ class PostDisplay extends Component {
       <VoteScore id={post.id} score={post.voteScore}></VoteScore>
         <div className="postContent">
           <h4 className="title">
-             <Link to={'/postDetail/'+post.id}>
+             <Link to={`/${post.category}/${post.id}`}>
               {post.title}
              </Link>
           </h4>
@@ -83,14 +78,14 @@ class PostDisplay extends Component {
               {new Date(post.timestamp).toString().substring(0, 15)}
             </span>,&nbsp;
             <span className="author">by {post.author}</span><br />
-            <Link to={'/cat/'+post.category} className="category">
+            <Link to={`/${post.category}`} className="category">
               {post.category}
             </Link>&nbsp;
             <span className="comments">({post.commentCount}&nbsp;
               comment{(post.commentCount >= 2)? 's':''})
             </span><br />
             <div className="btn-group">
-              <Link to={`/post/edit/${post.id}`} className="btn btn-xs btn-default">
+              <Link to={`/${post.category}/${post.id}/edit/`} className="btn btn-xs btn-default">
                 <span className="glyphicon glyphicon-pencil"></span> Edit
               </Link>
               &nbsp;&nbsp;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 
 import { clearPost, addPost } from 'actions'
 import PostDisplay from 'components/postDisplay/postDisplay'
@@ -10,6 +11,9 @@ import API from 'utils/api'
 * @description Displays post body and its comments.
 */
 class PostDetails extends Component {
+  state = {
+    notFound: false
+  }
   /**
   * @description Loads the comments from api
   */
@@ -18,6 +22,9 @@ class PostDetails extends Component {
 
     this.props.clearPost()
     API.getPostDetails(id).then(res=>{
+      if( Object.keys(res).length === 0)
+        this.setState({notFound: true})
+
       this.props.addPost(res)
     })
   }
@@ -26,9 +33,13 @@ class PostDetails extends Component {
   * @description Renders the component.
   */
   render() {
-    const { post } = this.props
+    const { posts } = this.props
+    const post = posts[this.props.match.params.id]
 
-    if( !post )
+    if( this.state.notFound )
+      return <Redirect to="/404" />
+
+    if( Object.keys(posts).length === 0 || post === undefined )
       return ''
 
     return <div className="postDetails">
@@ -48,7 +59,7 @@ class PostDetails extends Component {
 */
 function mapStateToProps ({ posts, comments }) {
   return {
-    post: Object.values(posts)[0]
+    posts: posts
   }
 }
 
