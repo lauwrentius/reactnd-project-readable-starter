@@ -91,9 +91,7 @@ class CommentForm extends Component {
   * @description Renders the component.
   */
   render() {
-    const { comments, id } = this.props
     const { body, author, editComment } = this.state
-    const comment = comments[id]
 
     return <div className="commentForm">
         <div className="form-group">

@@ -39,7 +39,7 @@ function posts (state = {}, action) {
     case ADD_COMMENT:
     case DELETE_COMMENT:
       let p = Object.assign({}, state[comment.parentId])
-      p['commentCount'] += (action.type == ADD_COMMENT)? 1 : -1
+      p['commentCount'] += (action.type === ADD_COMMENT)? 1 : -1
 
       return Object.assign({}, state, {[p.id]:p})
 

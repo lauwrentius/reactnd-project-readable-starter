@@ -65,8 +65,10 @@ a.curr{
   font-size: 18px;
   margin: 2px 0px 2px 0px;
 }
-.voteScore a{
+.voteScore span{
+  color: #337ab7;
   font-weight: bold;
+  cursor: pointer;
   text-decoration: none !important;
 }
 

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
 import uuidv1 from 'uuid/v1'
 
 import API from 'utils/api'
 
+/**
+* @description Displays post form for user to edit/add post.
+*/
 class PostForm extends Component {
   state = {
     id: "",
@@ -14,6 +16,9 @@ class PostForm extends Component {
     category: ""
   }
 
+  /**
+  * @description populate the form on post edit.
+  */
   componentWillMount = () => {
     const {match} = this.props
 
@@ -33,9 +38,17 @@ class PostForm extends Component {
       this.setState({category:match.params.param})
     }
   }
+
+  /**
+  * @description Controlled components event handler.
+  */
   handleChange = (e) =>{
     this.setState({[e.target.name]: e.target.value});
   }
+
+  /**
+  * @description Triggered when the user submits the post.
+  */
   onSubmit = (e) => {
     const {match, history} = this.props
     const {id, title,body,author,category} = this.state
@@ -58,6 +71,10 @@ class PostForm extends Component {
       })
     }
   }
+
+  /**
+  * @description Renders the component.
+  */
   render() {
     const {categories, match} = this.props
     const {title, body, author, category} = this.state
@@ -108,12 +125,18 @@ class PostForm extends Component {
   }
 }
 
+/**
+* @description Connects the store to the component.
+*/
 function mapStateToProps ({ categories }) {
   return {
     categories: Object.values(categories)
   }
 }
 
+/**
+* @description Dispatch actions to the store.
+*/
 function mapDispatchToProps (dispatch) {
   return {
   }

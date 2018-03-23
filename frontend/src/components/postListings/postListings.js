@@ -2,24 +2,39 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
+import PostDisplay from 'components/postDisplay/postDisplay'
 import { addPost, clearPost } from 'actions'
 import API from 'utils/api'
 
-import PostDisplay from 'components/postDisplay/postDisplay'
 
+/**
+* @description Displays a list of posts for a categories.
+* Users are able to sort comments based on score and date,
+*/
 class PostListings extends Component {
   state = {
     sort: 'SCORE',
     sortArr: ["NEW","SCORE","TITLE"]
   }
+
+  /**
+  * @description loads posts on mount
+  */
   componentWillMount() {
     this.loadPost()
   }
+
+  /**
+  * @description Calls the api to load all posts whenever a category is changed
+  */
   componentDidUpdate(prevProps, prevState){
     if (this.props.location.pathname !== prevProps.location.pathname)
       this.loadPost()
   }
 
+  /**
+  * @description Calls the api to load postsaccording to the category
+  */
   loadPost(){
     const { path, params } = this.props.match
 
@@ -34,13 +49,17 @@ class PostListings extends Component {
       })
     }
   }
+
+  /**
+  * @description change the post sort system
+  */
   setSort = (e) => {
     this.setState({sort: e.currentTarget.dataset.sort})
   }
-  currSort = (type) => {
-    return (type === this.state.sort)?'curr':''
-  }
 
+  /**
+  * @description returns a sorted array to be displaed by the component.
+  */
   displayPost = () => {
     return this.props.posts.sort( (a,b) => {
       if(this.state.sort === 'NEW')
@@ -53,8 +72,11 @@ class PostListings extends Component {
     })
   }
 
+  /**
+  * @description This function will render the application.
+  */
   render() {
-    const { posts, match } = this.props
+    const { match } = this.props
     const { sort, sortArr } = this.state
     let category = (match.params.category)? match.params.category: ''
 
@@ -78,18 +100,24 @@ class PostListings extends Component {
           </div>
         }
         {this.displayPost().map(p=>{
-          return <PostDisplay key={p.id} post={p}></PostDisplay>
+          return <PostDisplay key={p.id} id={p.id}></PostDisplay>
         })}
       </div>)
   }
 }
 
+/**
+* @description Connects the store to the component.
+*/
 function mapStateToProps ({ posts }) {
   return {
     posts: Object.values(posts)
   }
 }
 
+/**
+* @description Dispatch actions to the store.
+*/
 function mapDispatchToProps (dispatch) {
   return {
     addPost: (data) => dispatch(addPost(data)),

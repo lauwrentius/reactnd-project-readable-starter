@@ -32,7 +32,7 @@ class PostDetails extends Component {
       return ''
 
     return <div className="postDetails">
-      <PostDisplay post={post}></PostDisplay>
+      <PostDisplay id={post.id}></PostDisplay>
       {post.body &&
         <div>
           <div className="postBody well">{post.body}</div>

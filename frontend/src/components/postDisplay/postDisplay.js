@@ -14,7 +14,7 @@ import VoteScore from 'components/voteScore/voteScore'
 class PostDisplay extends Component {
   static propTypes = {
     /** Post id to be displayed */
-    post: PropTypes.object.isRequired
+    id: PropTypes.string.isRequired
   }
   state = {
     /** Modal window state for post deletion prompt */
@@ -25,16 +25,23 @@ class PostDisplay extends Component {
   * @description Triggered when the user confirms the deletion of the post.
   */
   onDelete = () => {
-    const { post, deletePost, history } = this.props
-    API.deletePost(post.id).then(res=>{
+    const { posts, id, deletePost, history } = this.props
+    const post = posts[id]
+
+    API.deletePost(id).then(res=>{
       deletePost(post)
       history.push(`/`)
     })
   }
-  render() {
-    const { post } = this.props
 
-    if( !post )
+  /**
+  * @description Renders the component.
+  */
+  render() {
+    const { posts, id } = this.props
+    const post = posts[id]
+
+    if( post === undefined )
       return ''
 
     if( post.error ){
@@ -97,12 +104,18 @@ class PostDisplay extends Component {
       </div>
   }
 }
-
+/**
+* @description Connects the store to the component.
+*/
 function mapStateToProps ({ posts }) {
   return {
+    posts: posts
   }
 }
 
+/**
+* @description Dispatch actions to the store.
+*/
 function mapDispatchToProps (dispatch) {
   return {
     deletePost: (data) => dispatch(deletePost(data))

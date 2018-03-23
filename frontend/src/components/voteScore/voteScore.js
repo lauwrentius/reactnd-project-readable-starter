@@ -5,12 +5,22 @@ import PropTypes from 'prop-types'
 import { editPost, editComment } from 'actions'
 import API from 'utils/api'
 
+/**
+* @description Displays the score for the current post/comments.
+* Users are able to upvote./downvote the  post/comments.
+*/
 class VoteScore extends Component {
   static propTypes = {
+    /** The post/comment id */
     id: PropTypes.string.isRequired,
+    /** The post/comment score */
     score: PropTypes.number.isRequired,
+    /** The type of component (post/comments)  */
     type: PropTypes.string
   }
+  /**
+  * @description Triggered when the user clicks upvote/downvote.
+  */
   votePost = (e) =>{
     let option = e.currentTarget.dataset.vote
     if(this.props.type === 'comment'){
@@ -26,23 +36,33 @@ class VoteScore extends Component {
     }
   }
 
+  /**
+  * @description This function will render the application.
+  */
   render(){
     const { score } = this.props
 
     return <div className="voteScore">
-          <a onClick={this.votePost} data-vote="upVote"
-            className="upvote glyphicon glyphicon-thumbs-up"></a>
+          <span onClick={this.votePost} data-vote="upVote"
+            className="upvote glyphicon glyphicon-thumbs-up"></span>
           <div className="score">{score}</div>
-          <a onClick={this.votePost} data-vote="downVote"
-          className="downvote glyphicon glyphicon-thumbs-down"></a>
+          <span onClick={this.votePost} data-vote="downVote"
+          className="downvote glyphicon glyphicon-thumbs-down"></span>
         </div>
   }
 }
 
-function mapStateToProps ({}) {
+/**
+* @description Connects the store to the component.
+*/
+function mapStateToProps () {
   return {
   }
 }
+
+/**
+* @description Dispatch actions to the store.
+*/
 function mapDispatchToProps (dispatch) {
   return {
     editPost: (data) => dispatch(editPost(data)),
