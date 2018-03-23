@@ -36,25 +36,9 @@ a.curr{
   padding: 19px 0px;
 }
 
-.example-enter {
-  opacity: 0.01;
-}
-.example-enter.example-enter-active {
-  opacity: 1;
-  transition: opacity 500ms ease-in;
-}
-.example-leave {
-  opacity: 1;
-}
-.example-leave.example-leave-active {
-  opacity: 0.01;
-  transition: opacity 300ms ease-in;
-}
-
 .commentContent,
 .postContent{
   flex-grow: 1;
-  /* display: inline-block; */
   vertical-align: top;
   font-size: 14px;
   line-height: 16px;
@@ -70,7 +54,6 @@ a.curr{
 }
 
 .voteScore{
-  /* display: inline-block; */
   text-align: center;
   width: 40px;
   vertical-align: top;

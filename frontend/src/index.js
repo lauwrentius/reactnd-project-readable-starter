@@ -30,6 +30,7 @@ const store = createStore(
   )
 )
 
+/** Index file where the app is mounted */
 ReactDOM.render(
   <Router history={history}>
     <Provider store={store}>

@@ -8,14 +8,22 @@ import { deletePost } from 'actions'
 import API from 'utils/api'
 import VoteScore from 'components/voteScore/voteScore'
 
-
+/**
+* @description Displays post info.
+*/
 class PostDisplay extends Component {
   static propTypes = {
+    /** Post id to be displayed */
     post: PropTypes.object.isRequired
   }
   state = {
+    /** Modal window state for post deletion prompt */
     show: false
   }
+
+  /**
+  * @description Triggered when the user confirms the deletion of the post.
+  */
   onDelete = () => {
     const { post, deletePost, history } = this.props
     API.deletePost(post.id).then(res=>{

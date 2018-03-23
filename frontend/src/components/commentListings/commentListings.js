@@ -1,20 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
 import {withRouter} from 'react-router-dom'
-import { CSSTransitionGroup } from 'react-transition-group'
 
 import { initComment, clearComment } from 'actions'
 import CommentDisplay from 'components/commentDisplay/commentDisplay'
 import CommentForm from 'components/commentForm/commentForm'
 import API from 'utils/api'
 
+/**
+* @description Displays a list of comments for a post.
+* Users are able to sort comments based on score and date,
+* It also has a form to add new comments
+*/
 class CommentListings extends Component {
   state = {
     sort: 'NEW',
     sortArr: ["NEW","SCORE"]
   }
 
+  /**
+  * @description calls the API to load the comments
+  */
   componentWillMount() {
     let id = this.props.match.params.id
 
@@ -26,6 +32,10 @@ class CommentListings extends Component {
       },{}))
     })
   }
+
+  /**
+  * @description Triggered when the sort option is clicked
+  */
   setSort = (e) =>{
     let sort = e.currentTarget.dataset.sort
     let comments = this.props.comments.sort((a,b) => {
@@ -36,7 +46,12 @@ class CommentListings extends Component {
     })
     this.setState({comments, sort})
   }
+
+  /**
+  * @description returns a sorted array to be displaed by the component.
+  */
   displayComments = () => {
+
     return this.props.comments.sort( (a,b) => {
       if(this.state.sort === 'NEW')
         return b.timestamp - a.timestamp
@@ -44,16 +59,17 @@ class CommentListings extends Component {
       return b.voteScore - a.voteScore
     })
   }
+
+
+  /**
+  * @description Renders the component.
+  */
   render() {
-    const { post, comments } = this.props
+    const { post } = this.props
     const { sort, sortArr } = this.state
 
     if(post === undefined)
       return ''
-
-    const commentList =  this.displayComments().map(comment=>(
-      <div key={comment.id}><CommentDisplay id={comment.id}>
-      </CommentDisplay></div>))
 
     return <div className="commentListings">
         <h4>Comments</h4>
@@ -64,25 +80,25 @@ class CommentListings extends Component {
         </div>
         <div className="sort-well well">
           sort by:&nbsp;
-          {sortArr.map(s=> (
-            <span><a data-sort={s}
+          {sortArr.map((s,i)=> (
+            <span key={i}><a data-sort={s}
               className={(sort === s)?'curr':''}
               onClick={this.setSort}>{s}</a>&nbsp;</span>
           ))}
         </div>
         <div className="commentsDisplay">
-          <CSSTransitionGroup
-          transitionName="example"
-          transitionAppearTimeout={500}
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}>
-            {commentList}
-          </CSSTransitionGroup>
+          {this.displayComments().map((comment) => (
+            <CommentDisplay key={comment.id} id={comment.id}>
+            </CommentDisplay>
+          ))}
         </div>
       </div>
   }
 }
 
+/**
+* @description Connects the store to the component.
+*/
 function mapStateToProps ({ posts, comments }) {
   return {
     post: Object.values(posts)[0],
@@ -90,6 +106,9 @@ function mapStateToProps ({ posts, comments }) {
   }
 }
 
+/**
+* @description Dispatch actions to the store.
+*/
 function mapDispatchToProps (dispatch) {
   return {
     initComment: (data) => dispatch(initComment(data)),

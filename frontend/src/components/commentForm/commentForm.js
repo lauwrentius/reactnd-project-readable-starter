@@ -6,9 +6,14 @@ import uuidv1 from 'uuid/v1'
 import { addComment, editComment } from 'actions'
 import API from 'utils/api'
 
+/**
+* @description Displays comment form for user to edit/add comments.
+*/
 class CommentForm extends Component {
   static propTypes = {
+    /** comment id to be displayed */
     id: PropTypes.string,
+    /** post id where the comment belongs */
     parentId: PropTypes.string
   }
   state = {
@@ -16,11 +21,14 @@ class CommentForm extends Component {
     author: "",
     editComment: false
   }
+
+  /**
+  * @description populate the form on edit mode.
+  */
   componentWillMount = () => {
     const {id, comments} = this.props
     const comment = comments[id]
 
-    // console.log("MOUNT",comment)
     if(this.props.id !== undefined){
       this.setState({
         body: comment.body,
@@ -29,15 +37,27 @@ class CommentForm extends Component {
       })
     }
   }
+
+  /**
+  * @description Controlled components event handler.
+  */
   handleChange = (e) =>{
     this.setState({[e.target.name]: e.target.value});
   }
+
+  /**
+  * @description Triggered when the user cancels the current edit.
+  */
   onCancel = () => {
     const { comments, id } = this.props
     let comment = Object.assign({}, comments[id])
     comment.editMode = false
     this.props.editComment(comment)
   }
+
+  /**
+  * @description Triggered when the user submits the current edit.
+  */
   onEdit = () => {
     const { comments, id } = this.props
     const { body } = this.state
@@ -49,6 +69,10 @@ class CommentForm extends Component {
       this.props.editComment(res)
     })
   }
+
+  /**
+  * @description Triggered when the user submits the current edit.
+  */
   onAdd = () => {
     const { body, author } = this.state
     console.log(this.props.parentId)
@@ -59,18 +83,17 @@ class CommentForm extends Component {
         author,
         parentId: this.props.parentId
     }).then(res=>{
-      console.log(res)
       this.setState({body: "", author:""});
       this.props.addComment(res)
     })
   }
-
+  /**
+  * @description Renders the component.
+  */
   render() {
     const { comments, id } = this.props
     const { body, author, editComment } = this.state
     const comment = comments[id]
-
-    // const {editMode} = this.state
 
     return <div className="commentForm">
         <div className="form-group">
@@ -112,12 +135,18 @@ class CommentForm extends Component {
   }
 }
 
+/**
+* @description Connects the store to the component.
+*/
 function mapStateToProps ({ comments }) {
   return {
     comments: comments
   }
 }
 
+/**
+* @description Dispatch actions to the store.
+*/
 function mapDispatchToProps (dispatch) {
   return {
     editComment: (data) => dispatch(editComment(data)),

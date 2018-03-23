@@ -7,34 +7,40 @@ import VoteScore from 'components/voteScore/voteScore'
 import CommentForm from 'components/commentForm/commentForm'
 import API from 'utils/api'
 
+/**
+* @description Displays a single block of comment.
+* It also displays comment form for editing comment
+*/
 class CommentDisplay extends Component {
   static propTypes = {
+    /** comment id to be displayed */
     id: PropTypes.string.isRequired,
   }
-  state = {
-    classNames: "commentEntry well"
-  }
-  componentDidMount(){
-    const { classNames } = this.state
 
-    this.setState({classNames: classNames.concat(" active")})
-  }
+  /**
+  * @description Click event to toggle the comment's edit mode.
+  */
   onEdit = () => {
     const { comments, id } = this.props
     let comment = Object.assign({}, comments[id]);
     comment.editMode = true
     this.props.editComment(comment)
   }
+
+  /**
+  * @description Delete comment click event.
+  */
   onDelete = (e) => {
     API.deleteComment(this.props.id).then(res=>{
-      console.log(res)
       this.props.deleteComment(res)
     })
   }
 
+  /**
+  * @description Renders the component.
+  */
   render() {
     const { comments, id } = this.props
-    const { classNames } = this.state
     const comment = comments[id]
 
     if(comment === undefined)
@@ -48,7 +54,7 @@ class CommentDisplay extends Component {
           </div>
         </div>
 
-    return <div className={classNames}>
+    return <div className="commentEntry well">
       <VoteScore type="comment" id={comment.id} score={comment.voteScore}></VoteScore>
       <div className="commentContent">
         <div className="commentBody">
@@ -74,17 +80,21 @@ class CommentDisplay extends Component {
   }
 }
 
+/**
+* @description Connects the store to the component.
+*/
 function mapStateToProps ({ comments }) {
   return {
     comments: comments
   }
 }
-
+/**
+* @description Dispatch actions to the store.
+*/
 function mapDispatchToProps (dispatch) {
   return {
     editComment: (data) => dispatch(editComment(data)),
-    deleteComment: (data) => dispatch(deleteComment(data)),
-    // clearComment: () => dispatch(clearComment())
+    deleteComment: (data) => dispatch(deleteComment(data))
   }
 }
 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import { withRouter, Route, Switch } from 'react-router-dom'
+import { withRouter, Route } from 'react-router-dom'
 
 import './app.css';
 
@@ -9,10 +8,16 @@ import PostListings from 'components/postListings/postListings'
 import PostDetails from 'components/postDetails/postDetails'
 import PostForm from 'components/postForm/postForm'
 
+/**
+* @description Udacity Readable App.
+*  This class handles components to be displayed via routes.
+*/
 class App extends Component {
-  render() {
-    const { addCal } = this.props
 
+  /**
+  * @description This function will render the application.
+  */
+  render() {
     return (
       <div className="App">
         <header>
@@ -32,17 +37,5 @@ class App extends Component {
   }
 }
 
-function mapStateToProps ({ categories, posts }) {
-  return {
-  }
-}
 
-function mapDispatchToProps (dispatch) {
-  return {
-  }
-}
-
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App))
+export default withRouter(App)

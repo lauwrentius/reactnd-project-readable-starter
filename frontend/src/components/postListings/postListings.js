@@ -61,8 +61,8 @@ class PostListings extends Component {
     return (<div className="postListings">
         <div className="sort-well well">
           sort by:&nbsp;
-          {sortArr.map(s=> (
-            <span><a data-sort={s}
+          {sortArr.map((s,i)=> (
+            <span key={i}><a data-sort={s}
               className={(sort === s)?'curr':''}
               onClick={this.setSort}>{s}</a>&nbsp;</span>
           ))}
