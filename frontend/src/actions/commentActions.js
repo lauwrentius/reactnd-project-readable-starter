@@ -1,5 +1,6 @@
 import API from 'utils/api'
 import uuidv1 from 'uuid/v1'
+import toObject from 'utils/helpers'
 
 import {
   INIT_COMMENT,
@@ -9,10 +10,14 @@ import {
   DELETE_COMMENT
 } from './ActionTypes'
 
-export function initComment(comment) {
-  return {
-    type: INIT_COMMENT,
-    comment: comment
+export function initComment(postID) {
+  return (dispatch) => {
+    API.getPostComments(postID).then(res=>{
+      dispatch((comment =>({
+        type: INIT_COMMENT,
+        comment: comment
+      }))(toObject(res)))
+    })
   }
 }
 export function addComment(comment) {

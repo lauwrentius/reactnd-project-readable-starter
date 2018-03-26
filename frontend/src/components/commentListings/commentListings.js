@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {withRouter} from 'react-router-dom'
 
-import { initComment, clearComment } from 'actions'
+import { initComment } from 'actions'
 import CommentDisplay from 'components/commentDisplay/CommentDisplay'
 import CommentForm from 'components/commentForm/CommentForm'
-import API from 'utils/api'
 
 /**
 * @description Displays a list of comments for a post.
@@ -19,26 +18,19 @@ class CommentListings extends Component {
   }
 
   /**
-  * @description calls the API to load the comments
+  * @description Initialize the comments
   */
   componentWillMount() {
     let id = this.props.match.params.id
-
-    this.props.clearComment()
-    API.getPostComments(id).then(res=>{
-      this.props.initComment(res.reduce((obj,val)=> {
-        obj[val.id]=val
-        return obj
-      },{}))
-    })
+    this.props.initComment(id)
   }
 
   /**
   * @description Triggered when the sort option is clicked
   */
   setSort = (e) =>{
-    let sort = e.currentTarget.dataset.sort
-    let comments = this.props.comments.sort((a,b) => {
+    const sort = e.currentTarget.dataset.sort
+    const comments = this.props.comments.sort((a,b) => {
       if(sort === 'NEW')
         return b.timestamp - a.timestamp
 
@@ -51,7 +43,6 @@ class CommentListings extends Component {
   * @description returns a sorted array to be displaed by the component.
   */
   displayComments = () => {
-
     return this.props.comments.sort( (a,b) => {
       if(this.state.sort === 'NEW')
         return b.timestamp - a.timestamp
@@ -111,8 +102,7 @@ function mapStateToProps ({ posts, comments }) {
 */
 function mapDispatchToProps (dispatch) {
   return {
-    initComment: (data) => dispatch(initComment(data)),
-    clearComment: () => dispatch(clearComment())
+    initComment: (data) => dispatch(initComment(data))
   }
 }
 

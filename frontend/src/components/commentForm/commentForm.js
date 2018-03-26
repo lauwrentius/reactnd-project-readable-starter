@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import uuidv1 from 'uuid/v1'
 
 import { addComment, editComment } from 'actions'
 
