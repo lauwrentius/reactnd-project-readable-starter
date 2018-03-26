@@ -6,7 +6,7 @@ import { Modal } from 'react-bootstrap';
 
 import { deletePost } from 'actions'
 import API from 'utils/api'
-import VoteScore from 'components/voteScore/voteScore'
+import VoteScore from 'components/voteScore/VoteScore'
 
 /**
 * @description Displays post info.

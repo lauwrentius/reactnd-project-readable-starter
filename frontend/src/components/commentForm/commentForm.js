@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import uuidv1 from 'uuid/v1'
 
 import { addComment, editComment } from 'actions'
-import API from 'utils/api'
 
 /**
 * @description Displays comment form for user to edit/add comments.
@@ -39,6 +38,14 @@ class CommentForm extends Component {
   }
 
   /**
+  * @description Clear the form whenever a comment is succesfully added.
+  */
+  componentWillReceiveProps = (nextProps) => {
+    if(Object.keys(this.props.comments).length < Object.keys(nextProps.comments).length)
+      this.setState({body: "", author: ""})
+  }
+
+  /**
   * @description Controlled components event handler.
   */
   handleChange = (e) =>{
@@ -50,8 +57,7 @@ class CommentForm extends Component {
   */
   onCancel = () => {
     const { comments, id } = this.props
-    let comment = Object.assign({}, comments[id])
-    comment.editMode = false
+    const comment = Object.assign(comments[id], {editMode: false})
     this.props.editComment(comment)
   }
 
@@ -62,12 +68,9 @@ class CommentForm extends Component {
     const { comments, id } = this.props
     const { body } = this.state
     const comment = comments[id]
-    let timestamp = comment.timestamp
+    const timestamp = comment.timestamp
 
-    API.editComment(id, {body, timestamp}).then(res=>{
-      res.editMode = false
-      this.props.editComment(res)
-    })
+    this.props.editComment({id, body, timestamp })
   }
 
   /**
@@ -75,16 +78,10 @@ class CommentForm extends Component {
   */
   onAdd = () => {
     const { body, author } = this.state
-    console.log(this.props.parentId)
-    API.addComment({
-        id: uuidv1(),
-        timestamp: Date.now(),
-        body,
-        author,
-        parentId: this.props.parentId
-    }).then(res=>{
-      this.setState({body: "", author:""});
-      this.props.addComment(res)
+    this.props.addComment({
+      body,
+      author,
+      parentId: this.props.parentId
     })
   }
   /**
@@ -148,8 +145,7 @@ function mapStateToProps ({ comments }) {
 function mapDispatchToProps (dispatch) {
   return {
     editComment: (data) => dispatch(editComment(data)),
-    addComment: (data) => dispatch(addComment(data)),
-    // clearComment: () => dispatch(clearComment())
+    addComment: (data) => dispatch(addComment(data))
   }
 }
 

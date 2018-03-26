@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-import PostDisplay from 'components/postDisplay/postDisplay'
+import PostDisplay from 'components/postDisplay/PostDisplay'
 import { fetchPost } from 'actions'
 
 /**
@@ -70,7 +70,7 @@ class PostListings extends Component {
   render() {
     const { match } = this.props
     const { sort, sortArr } = this.state
-    let category = (match.params.category)? match.params.category: ''
+    const category = (match.params.category)? match.params.category: ''
 
     return (<div className="postListings">
         <div className="sort-well well">
@@ -92,6 +92,8 @@ class PostListings extends Component {
           </div>
         }
         {this.displayPost().map(p=>{
+          if(p === null) return ''
+
           return <PostDisplay key={p.id} id={p.id}></PostDisplay>
         })}
       </div>)

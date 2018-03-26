@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import { editComment, deleteComment } from 'actions'
-import VoteScore from 'components/voteScore/voteScore'
-import CommentForm from 'components/commentForm/commentForm'
+import { updateComment, deleteComment } from 'actions'
+import VoteScore from 'components/voteScore/VoteScore'
+import CommentForm from 'components/commentForm/CommentForm'
 
 /**
 * @description Displays a single block of comment.
@@ -21,9 +21,9 @@ class CommentDisplay extends Component {
   */
   onEdit = () => {
     const { comments, id } = this.props
-    const comment = Object.assign({}, comments[id]);
-    comment.editMode = true
-    this.props.editComment(comment)
+    const comment = Object.assign(comments[id], {editMode: true});
+    // comment.editMode = true
+    this.props.updateComment(comment)
   }
 
   /**
@@ -90,7 +90,7 @@ function mapStateToProps ({ comments }) {
 */
 function mapDispatchToProps (dispatch) {
   return {
-    editComment: (data) => dispatch(editComment(data)),
+    updateComment: (data) => dispatch(updateComment(data)),
     deleteComment: (data) => dispatch(deleteComment(data))
   }
 }

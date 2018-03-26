@@ -55,7 +55,7 @@ class PostForm extends Component {
   * @description Triggered when the user submits the post.
   */
   onSubmit = (e) => {
-    const {categories, match, history} = this.props
+    const {categories, history} = this.props
     const {id, title, body, author, category, editMode} = this.state
     const cat = (category === '')? categories[0].name:category
 
@@ -82,7 +82,7 @@ class PostForm extends Component {
   * @description Renders the component.
   */
   render() {
-    const {categories, match} = this.props
+    const {categories} = this.props
     const {title, body, author, category, editMode} = this.state
 
     return <div className="post-form row">

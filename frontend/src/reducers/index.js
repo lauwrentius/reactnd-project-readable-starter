@@ -10,8 +10,8 @@ import {
   INIT_COMMENT,
   ADD_COMMENT,
   CLEAR_COMMENT,
-  EDIT_COMMENT,
-  REMOVE_COMMENT
+  UPDATE_COMMENT,
+  DELETE_COMMENT
 } from 'actions'
 
 function categories (state = {}, action) {
@@ -41,7 +41,7 @@ function posts (state = {}, action) {
       return Object.assign({}, state, {[post.id]:post})
 
     case ADD_COMMENT:
-    case REMOVE_COMMENT:
+    case DELETE_COMMENT:
       let p = Object.assign({}, state[comment.parentId])
       p['commentCount'] += (action.type === ADD_COMMENT)? 1 : -1
 
@@ -72,10 +72,10 @@ function comments (state={}, action){
         ...state,
         [comment.id]: comment,
       }
-    case EDIT_COMMENT:
+    case UPDATE_COMMENT:
       return Object.assign({}, state, {[comment.id]:comment})
 
-    case REMOVE_COMMENT:
+    case DELETE_COMMENT:
       return Object.assign({},
         ...Object.values(state)
           .filter(c=>(c.id !== comment.id))

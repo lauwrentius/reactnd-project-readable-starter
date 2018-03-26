@@ -7,7 +7,7 @@ import {
   CLEAR_POST,
   EDIT_POST,
   DELETE_POST,
-} from './actionTypes'
+} from './ActionTypes'
 
 export function fetchPost(category=''){
   return (dispatch) => {
@@ -16,7 +16,17 @@ export function fetchPost(category=''){
     })
   }
 }
-
+export function fetchPostDetails(id){
+  return (dispatch) => {
+    API.getPostDetails(id).then(res=>{
+      console.log(res)
+      if(Object.keys(res).length === 0 || res.hasOwnProperty("error"))
+        dispatch(initPost({[id]:null}))
+      else
+        dispatch(initPost(toObject([res])))
+    })
+  }
+}
 export function initPost(post) {
   return {
     type: INIT_POST,

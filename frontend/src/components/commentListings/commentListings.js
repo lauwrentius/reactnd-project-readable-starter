@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import {withRouter} from 'react-router-dom'
 
 import { initComment, clearComment } from 'actions'
-import CommentDisplay from 'components/commentDisplay/commentDisplay'
-import CommentForm from 'components/commentForm/commentForm'
+import CommentDisplay from 'components/commentDisplay/CommentDisplay'
+import CommentForm from 'components/commentForm/CommentForm'
 import API from 'utils/api'
 
 /**
