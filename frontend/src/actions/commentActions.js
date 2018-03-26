@@ -8,7 +8,7 @@ import {
   CLEAR_COMMENT,
   UPDATE_COMMENT,
   DELETE_COMMENT
-} from './ActionTypes'
+} from './actionTypes'
 
 export function initComment(postID) {
   return (dispatch) => {

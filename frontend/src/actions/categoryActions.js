@@ -3,7 +3,7 @@ import toObject from 'utils/helpers'
 
 import {
   INIT_CATEGORY
-} from './ActionTypes'
+} from './actionTypes'
 
 export function fetchCategory(){
   return (dispatch) => {

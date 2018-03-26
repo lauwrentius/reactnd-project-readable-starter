@@ -7,7 +7,7 @@ import {
   CLEAR_POST,
   EDIT_POST,
   DELETE_POST,
-} from './ActionTypes'
+} from './actionTypes'
 
 export function fetchPost(category=''){
   return (dispatch) => {
