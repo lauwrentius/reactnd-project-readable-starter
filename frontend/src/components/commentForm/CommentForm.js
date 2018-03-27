@@ -37,14 +37,6 @@ class CommentForm extends Component {
   }
 
   /**
-  * @description Clear the form whenever a comment is succesfully added.
-  */
-  componentWillReceiveProps = (nextProps) => {
-    if(Object.keys(this.props.comments).length < Object.keys(nextProps.comments).length)
-      this.setState({body: "", author: ""})
-  }
-
-  /**
   * @description Controlled components event handler.
   */
   handleChange = (e) =>{
@@ -55,9 +47,8 @@ class CommentForm extends Component {
   * @description Triggered when the user cancels the current edit.
   */
   onCancel = () => {
-    const { comments, id } = this.props
-    const comment = Object.assign(comments[id], {editMode: false})
-    this.props.editComment(comment)
+    const { comments, id, editComment} = this.props
+    editComment(Object.assign(comments[id], {editMode: false}))
   }
 
   /**
@@ -69,7 +60,7 @@ class CommentForm extends Component {
     const comment = comments[id]
     const timestamp = comment.timestamp
 
-    this.props.editComment({id, body, timestamp })
+    this.props.editComment({id, body, timestamp})
   }
 
   /**
@@ -81,8 +72,11 @@ class CommentForm extends Component {
       body,
       author,
       parentId: this.props.parentId
+    }).then(res=>{
+      this.setState({body: "", author: ""})
     })
   }
+
   /**
   * @description Renders the component.
   */

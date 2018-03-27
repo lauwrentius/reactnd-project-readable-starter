@@ -51,7 +51,6 @@ class CommentListings extends Component {
     })
   }
 
-
   /**
   * @description Renders the component.
   */

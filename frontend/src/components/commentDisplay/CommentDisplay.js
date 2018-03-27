@@ -12,17 +12,16 @@ import CommentForm from 'components/commentForm/CommentForm'
 */
 class CommentDisplay extends Component {
   static propTypes = {
-    /** comment id to be displayed */
+    /** comment id */
     id: PropTypes.string.isRequired,
   }
 
   /**
-  * @description Click event to toggle the comment's edit mode.
+  * @description Update (dispatch to the store) comment to an edit mode.
   */
   onEdit = () => {
     const { comments, id } = this.props
     const comment = Object.assign(comments[id], {editMode: true});
-    // comment.editMode = true
     this.props.updateComment(comment)
   }
 

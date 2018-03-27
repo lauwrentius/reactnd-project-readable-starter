@@ -10,7 +10,7 @@ import CommentListings from 'components/commentListings/CommentListings'
 */
 class PostDetails extends Component {
   /**
-  * @description Loads the comments from api
+  * @description Fetch the comments
   */
   componentWillMount() {
     this.props.fetchPostDetails(this.props.match.params.id)
@@ -23,10 +23,10 @@ class PostDetails extends Component {
     const { posts } = this.props
     const post = posts[this.props.match.params.id]
 
-    if( post === undefined )
+    if( !post )
       return ''
 
-    if( post === null )
+    if( post.error )
       return <div className="postDetails well">
         <h4>Sorry, post not found.</h4></div>
 
@@ -57,8 +57,6 @@ function mapStateToProps ({ posts, comments }) {
 function mapDispatchToProps (dispatch) {
   return {
     fetchPostDetails: (data) => dispatch(fetchPostDetails(data))
-    // addPost: (data) => dispatch(addPost(data)),
-    // clearPost: () => dispatch(clearPost())
   }
 }
 

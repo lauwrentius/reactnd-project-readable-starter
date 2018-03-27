@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import uuidv1 from 'uuid/v1'
 
-import API from 'utils/api'
+import { fetchPostDetails, addPost, editPost } from 'actions'
 
 /**
 * @description Displays post form for user to edit/add post.
@@ -15,7 +14,8 @@ class PostForm extends Component {
     body: "",
     author: "",
     category: "",
-    editMode: false
+    editMode: false,
+    prevlocation: ""
   }
 
   /**
@@ -26,21 +26,25 @@ class PostForm extends Component {
     const id = match.params.id
     const category = match.params.category
 
-    console.log(this.props.match)
     if( id !== undefined){
-      API.getPostDetails(id).then(res=>{
+      this.setState({editMode: true})
+
+      this.props.fetchPostDetails(id).then(res=>{
+        const post = res.post[id]
+
+        if(post.error)
+          return
+
         this.setState({
           id,
-          title: res.title,
-          body: res.body,
-          author: res.author,
-          category: res.category,
-          editMode: true
+          title: post.title,
+          body: post.body,
+          author: post.author,
+          category: post.category
         })
       })
-    }
-    if( category !== undefined ){
-      this.setState({category})
+    }else{
+      this.setState({id, category})
     }
   }
 
@@ -55,25 +59,18 @@ class PostForm extends Component {
   * @description Triggered when the user submits the post.
   */
   onSubmit = (e) => {
-    const {categories, history} = this.props
+    const {history, addPost, editPost} = this.props
     const {id, title, body, author, category, editMode} = this.state
-    const cat = (category === '')? categories[0].name:category
 
     if(editMode){
-      API.editPost(id, {title, body})
-        .then(res=>{
-          history.goBack()
-        })
+      editPost({id,title,body}).then(res =>{
+        const post = res.post
+        history.push(`/${post.category}/${post.id}`)
+      })
     }else{
-      API.addPost({
-        id: uuidv1(),
-        timestamp: Date.now(),
-        title,
-        body,
-        author,
-        category: cat
-      }).then(res =>{
-        history.push(`/${res.category}/${res.id}`)
+      addPost({title,body,author,category}).then(res=>{
+        const post = res.post
+        history.push(`/${post.category}/${post.id}`)
       })
     }
   }
@@ -82,8 +79,21 @@ class PostForm extends Component {
   * @description Renders the component.
   */
   render() {
-    const {categories} = this.props
-    const {title, body, author, category, editMode} = this.state
+    const {categories, posts} = this.props
+    const {id, title, body, author, category, editMode} = this.state
+    const post = posts[id]
+
+    if(editMode){
+      if( !post )
+         return ''
+
+      if( post.error )
+        return <div className="postDetails well">
+          <h4>Sorry, post not found.</h4></div>
+    }else{
+      if(category === '' && categories.length !== 0)
+        this.setState({category: categories[0]['name']})
+    }
 
     return <div className="post-form row">
       <div className="col-md-8">
@@ -134,8 +144,9 @@ class PostForm extends Component {
 /**
 * @description Connects the store to the component.
 */
-function mapStateToProps ({ categories }) {
+function mapStateToProps ({ posts, categories }) {
   return {
+    posts: posts,
     categories: Object.values(categories)
   }
 }
@@ -145,6 +156,9 @@ function mapStateToProps ({ categories }) {
 */
 function mapDispatchToProps (dispatch) {
   return {
+    fetchPostDetails: (data) => dispatch(fetchPostDetails(data)),
+    addPost: (data) => dispatch(addPost(data)),
+    editPost: (data) => dispatch(editPost(data))
   }
 }
 

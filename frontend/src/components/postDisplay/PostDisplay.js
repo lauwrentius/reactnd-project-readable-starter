@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap';
 
 import { deletePost } from 'actions'
-import API from 'utils/api'
 import VoteScore from 'components/voteScore/VoteScore'
 
 /**
@@ -22,15 +21,14 @@ class PostDisplay extends Component {
   }
 
   /**
-  * @description Triggered when the user confirms the deletion of the post.
+  * @description Triggered when the user confirms the deletion of the post. Redirects when the API call is successfull
   */
   onDelete = () => {
-    const { posts, id, deletePost, history } = this.props
-    const post = posts[id]
+    const { id, deletePost, history, match } = this.props
 
-    API.deletePost(id).then(res=>{
-      deletePost(post)
-      history.push(`/`)
+    deletePost(id).then(res=>{
+      if(match.path === "/:category/:id")
+         history.push(`/${match.params.category}`)
     })
   }
 

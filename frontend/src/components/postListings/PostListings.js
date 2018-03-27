@@ -11,6 +11,7 @@ import { fetchPost } from 'actions'
 */
 class PostListings extends Component {
   state = {
+    emptyList: false,
     sort: 'SCORE',
     sortArr: ["NEW","SCORE","TITLE"]
   }
@@ -31,15 +32,18 @@ class PostListings extends Component {
   }
 
   /**
-  * @description Calls the api to load postsaccording to the category
+  * @description Fetch posts according to the category
   */
   loadPost(){
     const { path, params } = this.props.match
+    const cat = (path === '/')? '' : params['category']
 
-    if(path === '/')
-      this.props.fetchPost()
-    else
-      this.props.fetchPost(params['category'])
+    this.props.fetchPost(cat).then(res=>{
+      if(Object.keys(res.post).length === 0)
+        this.setState({emptyList: true})
+      else
+        this.setState({emptyList: false})
+    })
   }
 
   /**
@@ -69,7 +73,7 @@ class PostListings extends Component {
   */
   render() {
     const { match } = this.props
-    const { sort, sortArr } = this.state
+    const { sort, sortArr, emptyList } = this.state
     const category = (match.params.category)? match.params.category: ''
 
     return (<div className="postListings">
@@ -86,7 +90,7 @@ class PostListings extends Component {
             </Link>
           </div>
         </div>
-        {this.displayPost().length === 0 &&
+        {emptyList &&
           <div className="well">
             <h4>Sorry, no Posts in this category</h4>
           </div>

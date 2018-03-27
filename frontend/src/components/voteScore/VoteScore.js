@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
-import { editPost, editComment } from 'actions'
-import API from 'utils/api'
+import { votePost, voteComment } from 'actions'
 
 /**
 * @description Displays the score for the current post/comments.
@@ -18,22 +17,18 @@ class VoteScore extends Component {
     /** The type of component (post/comments)  */
     type: PropTypes.string
   }
+  
   /**
   * @description Triggered when the user clicks upvote/downvote.
   */
-  votePost = (e) =>{
-    let option = e.currentTarget.dataset.vote
-    if(this.props.type === 'comment'){
-      API.voteComment(this.props.id, {option})
-        .then(res => {
-          this.props.editComment(res)
-        })
-    }else{
-      API.votePost(this.props.id, {option})
-        .then(res => {
-          this.props.editPost(res)
-        })
-    }
+  vote = (e) =>{
+    const { voteComment, votePost, id } = this.props
+    const option = e.currentTarget.dataset.vote
+
+    if(this.props.type === 'comment')
+      voteComment({id, option})
+    else
+      votePost({id, option})
   }
 
   /**
@@ -43,20 +38,12 @@ class VoteScore extends Component {
     const { score } = this.props
 
     return <div className="voteScore">
-          <span onClick={this.votePost} data-vote="upVote"
+          <span onClick={this.vote} data-vote="upVote"
             className="upvote glyphicon glyphicon-thumbs-up"></span>
           <div className="score">{score}</div>
-          <span onClick={this.votePost} data-vote="downVote"
+          <span onClick={this.vote} data-vote="downVote"
           className="downvote glyphicon glyphicon-thumbs-down"></span>
         </div>
-  }
-}
-
-/**
-* @description Connects the store to the component.
-*/
-function mapStateToProps () {
-  return {
   }
 }
 
@@ -65,13 +52,13 @@ function mapStateToProps () {
 */
 function mapDispatchToProps (dispatch) {
   return {
-    editPost: (data) => dispatch(editPost(data)),
-    editComment: (data) => dispatch(editComment(data))
+    votePost: (data) => dispatch(votePost(data)),
+    voteComment: (data) => dispatch(voteComment(data))
   }
 }
 
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(VoteScore)
